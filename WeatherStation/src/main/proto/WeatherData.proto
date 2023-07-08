@@ -1,0 +1,43 @@
+syntax = "proto3";
+option java_package = "org.service";
+
+service WeatherDataService {
+  rpc getWeatherData(WeatherDataRequest) returns (WeatherData) {};
+}
+
+message WeatherData {
+
+  message Current_weather {
+    double temperature = 1;
+    double windspeed = 2;
+    double winddirection = 3;
+    uint32 weathercode = 4;
+    uint32 is_day = 5;
+    string time = 6;
+  }
+
+  message Hourly_units {
+    string time = 1;
+    string relativehumidity_2m = 2;
+  }
+
+  message Hourly {
+    repeated string time = 1;
+    repeated uint32 relativehumidity_2m = 2;
+  }
+
+  double latitude = 1;
+  double longitude = 2;
+  double generationtime_ms = 3;
+  uint32 utc_offset_seconds = 4;
+  string timezone = 5;
+  string timezone_abbreviation = 6;
+  double elevation = 7;
+  Current_weather current_weather = 8;
+  Hourly_units hourly_units = 9;
+  Hourly hourly = 10;
+}
+
+message WeatherDataRequest {
+  string client_id = 1;
+}
