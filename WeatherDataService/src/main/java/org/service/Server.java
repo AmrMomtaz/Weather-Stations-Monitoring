@@ -16,7 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @GRpcService
-public class Server extends org.service.WeatherDataServiceGrpc.WeatherDataServiceImplBase {
+public final class Server extends org.service.WeatherDataServiceGrpc.WeatherDataServiceImplBase {
 
     private static final Logger logger = LogManager.getLogger(Server.class);
     private static final String API_URL = "https://api.open-meteo.com/v1/forecast?latitude=31.2018&longitude=29.9158" +

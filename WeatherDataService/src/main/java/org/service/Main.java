@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.IOException;
 
 @SpringBootApplication
-public class Main {
+public final class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         // Used if needed to set the GRPC server port explicitly instead of 6565
 //        ServerBuilder serverBuilder = ServerBuilder.forPort(1717);
