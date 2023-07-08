@@ -19,8 +19,8 @@ import java.net.URL;
 public class Server extends org.service.WeatherDataServiceGrpc.WeatherDataServiceImplBase {
 
     private static final Logger logger = LogManager.getLogger(Server.class);
-    private static final String API_URL = "https://api.open-meteo.com/v1/forecast?latitude=31.2018&" +
-            "longitude=29.9158&hourly=relativehumidity_2m&current_weather=true&timezone=Africa%2FCairo&forecast_days=1";
+    private static final String API_URL = "https://api.open-meteo.com/v1/forecast?latitude=31.2018&longitude=29.9158" +
+            "&hourly=relativehumidity_2m&current_weather=true&timezone=Africa%2FCairo&forecast_days=1&timeformat=unixtime";
     private static final Integer TRIALS = 5;
     @Override
     public void getWeatherData(org.service.WeatherDataOuterClass.WeatherDataRequest request,
@@ -66,7 +66,7 @@ public class Server extends org.service.WeatherDataServiceGrpc.WeatherDataServic
         WeatherDataOuterClass.WeatherData.Hourly.Builder hourlyBuilder
                 = WeatherDataOuterClass.WeatherData.Hourly.newBuilder();
         jsonResponse.getJSONObject("hourly").getJSONArray("time").forEach
-                (time -> hourlyBuilder.addTime(time.toString()));;
+                (time -> hourlyBuilder.addTime(Long.parseLong(time.toString())));
         jsonResponse.getJSONObject("hourly").getJSONArray("relativehumidity_2m").forEach
                 (humidity -> hourlyBuilder.addRelativehumidity2M(Integer.parseInt(humidity.toString())));
         return WeatherDataOuterClass.WeatherData.newBuilder()
@@ -83,7 +83,7 @@ public class Server extends org.service.WeatherDataServiceGrpc.WeatherDataServic
                         .setWinddirection(jsonResponse.getJSONObject("current_weather").getDouble("winddirection"))
                         .setWeathercode(jsonResponse.getJSONObject("current_weather").getInt("weathercode"))
                         .setIsDay(jsonResponse.getJSONObject("current_weather").getInt("is_day"))
-                        .setTime(jsonResponse.getJSONObject("current_weather").getString("time"))
+                        .setTime(jsonResponse.getJSONObject("current_weather").getLong("time"))
                         .build())
                 .setHourlyUnits(WeatherDataOuterClass.WeatherData.Hourly_units.newBuilder()
                         .setTime(jsonResponse.getJSONObject("hourly_units").getString("time"))

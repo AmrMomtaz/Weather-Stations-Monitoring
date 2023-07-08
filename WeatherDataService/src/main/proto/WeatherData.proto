@@ -13,7 +13,7 @@ message WeatherData {
     double winddirection = 3;
     uint32 weathercode = 4;
     uint32 is_day = 5;
-    string time = 6;
+    uint64 time = 6;
   }
 
   message Hourly_units {
@@ -22,7 +22,7 @@ message WeatherData {
   }
 
   message Hourly {
-    repeated string time = 1;
+    repeated uint64 time = 1;
     repeated uint32 relativehumidity_2m = 2;
   }
 
