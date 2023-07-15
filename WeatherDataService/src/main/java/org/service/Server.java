@@ -20,7 +20,7 @@ public final class Server extends org.service.WeatherDataServiceGrpc.WeatherData
 
     private static final Logger logger = LogManager.getLogger(Server.class);
     private static final String API_URL = "https://api.open-meteo.com/v1/forecast?latitude=31.2018&longitude=29.9158" +
-            "&hourly=relativehumidity_2m&current_weather=true&timezone=Africa%2FCairo&forecast_days=1&timeformat=unixtime";
+            "&hourly=relativehumidity_2m&current_weather=true&timezone=Africa%2FCairo&forecast_days=1&timeformat=unixtime&temperature_unit=fahrenheit";
     private static final Integer TRIALS = 5;
     @Override
     public void getWeatherData(org.service.WeatherDataOuterClass.WeatherDataRequest request,
