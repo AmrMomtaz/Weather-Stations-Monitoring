@@ -24,7 +24,7 @@ The system is composed of three stages:
 * **Data Processing & Archiving:** The base central station is consuming the streamed
 data and archiving all data in the form of Parquet files.
 * **Indexing:** two variants of index are maintained
-    * Key-value store (Bitcask) for the latest reading from each individual station
+    * Key-value store (Bitcask) for the latest reading from each individual station.
     * ElasticSearch / Kibana that are running over the Parquet files.
  
 ![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/e0b80ce6-ad12-460c-b7fc-cb4d78810fef)
@@ -35,7 +35,7 @@ The next sections describes the requirements and implementation of each module (
 ## Weather Data Service
 
 Provides the current weather data to the weather stations performing the following steps: 
-1) Receives an gRPC request from a weather station requesting the the current weather data.
+1) Receives a gRPC request from a weather station requesting the the current weather data.
 2) Makes API call to [**Open-Meteo**](https://open-meteo.com/).
 3) Sends the response back to the weather station using RPC.
 
@@ -46,3 +46,14 @@ Important notes:
 
 ## Weather Station
 
+Each weather station outputs a status message every **1 second** to report its sampled
+weather status. The weather message should have the following schema:
+
+![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/bc58489e-c809-4bee-83c1-27c6a509fe98)
+
+The weather station randomly change the battery status according the following:
+* Low = **30%** of messages per service.
+* Medium = **40%** of messages per service.
+* High = **30%** of messages per service.
+
+And it randomly drops messages on a **10%** rate.
