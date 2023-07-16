@@ -29,3 +29,20 @@ data and archiving all data in the form of Parquet files.
  
 ![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/e0b80ce6-ad12-460c-b7fc-cb4d78810fef)
 
+**_Log4j2_** is used for logging in all the modules.<br>
+The next sections describes the requirements and implementation of each module (microservice).
+
+## Weather Data Service
+
+Provides the current weather data to the weather stations performing the following steps: 
+1) Receives an gRPC request from a weather station requesting the the current weather data.
+2) Makes API call to [**Open-Meteo**](https://open-meteo.com/).
+3) Sends the response back to the weather station using RPC.
+
+Important notes:
+* The gRPC server runs on its default port 6565 (Althought this can be changed as mentioned in the code).
+* Both the "weather data service" and the "weather station" uses the same exact protobuf schema.
+* This service only fetches the response and and sends it back to the station after parsing it to match the protobuf schema. And it doesn't add, remove or change any data on the received response.
+
+## Weather Station
+
