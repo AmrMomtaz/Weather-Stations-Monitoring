@@ -9,7 +9,7 @@ import io.grpc.ManagedChannelBuilder;
 import org.json.JSONObject;
 
 /**
- * Connects to the weather data service, fetches WeatherData object, parses it and finally returns JSONObject.
+ * Connects to the weather data service, fetches WeatherData object, parses it and returns it in JSONObject.
  */
 public final class WeatherDataServiceConnector {
 

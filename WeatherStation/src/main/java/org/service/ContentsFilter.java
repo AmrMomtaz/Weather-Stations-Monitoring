@@ -9,17 +9,23 @@ import org.json.JSONObject;
 
 /**
  * Filters unused fields and renames fields to match the target schema.
+ * Removes unnecessary fields and extracts the current humidity from the API response.
  */
 public final class ContentsFilter {
 
     public static JSONObject filterMessage(JSONObject apiMessage) {
-        long currentTimestamp = apiMessage.getJSONObject("current_weather").getLong("time");
-        JSONObject filteredMessage = new JSONObject(), weatherMessage = new JSONObject();
-        weatherMessage.put("humidity", getCurrentHumidity(apiMessage, currentTimestamp))
-                .put("temperature", (int) apiMessage.getJSONObject("current_weather").getDouble("temperature"))
-                .put("wind_speed", (int) apiMessage.getJSONObject("current_weather").getDouble("windspeed"));
-        filteredMessage.put("status_timestamp", currentTimestamp).put("weather", weatherMessage);
-        return filteredMessage;
+        try {
+            long currentTimestamp = apiMessage.getJSONObject("current_weather").getLong("time");
+            JSONObject weatherMessage = new JSONObject();
+            weatherMessage.put("humidity", getCurrentHumidity(apiMessage, currentTimestamp))
+                    .put("temperature", (int) apiMessage.getJSONObject("current_weather").getDouble("temperature"))
+                    .put("wind_speed", (int) apiMessage.getJSONObject("current_weather").getDouble("windspeed"));
+            return new JSONObject().put("weather", weatherMessage);
+        }
+        catch (Exception e) {
+            InvalidMessageChannel.addInvalidMessage(apiMessage);
+            return null;
+        }
     }
 
     /**
