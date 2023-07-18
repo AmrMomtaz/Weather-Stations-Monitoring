@@ -49,11 +49,28 @@ Important notes:
 Each weather station outputs a status message every **1 second** to report its sampled
 weather status. The weather message should have the following schema:
 
-![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/bc58489e-c809-4bee-83c1-27c6a509fe98)
+```yaml
+{
+   "station_id": 1, # Long
+   "s_no": 1, # Long auto-incremental with each message per service
+   "battery_status": "low", # String of (low, medium, high)
+   "status_timestamp": 1681521224, # Long Unix timestamp
+   "weather": {
+      "humidity": 35, # Integer percentage
+      "temperature": 100, # Integer in fahrenheit
+      "wind_speed": 13, # Integer km/h
+   }
+}
+```
 
-The weather station randomly change the battery status according the following:
+The weather station randomly drops messages on a **10%** rate and randomly changes the battery status according the following:
 * Low = **30%** of messages per service.
 * Medium = **40%** of messages per service.
 * High = **30%** of messages per service.
 
-And it randomly drops messages on a **10%** rate.
+The weather station performs the following steps:
+1) Sends gRPC request to weather data service and receives weather data response.
+2) Drops unused fields and filters the API response [**"Contents Filter Pattern"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/ContentFilter.html).
+3) Enriches the message with the missing weather station state fields [**"Contents Enricher Pattern"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/DataEnricher.html).
+4) Stores invalid messages in a seperate channel [**"Invalid Message Channel"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/InvalidMessageChannel.html).
+5) Feeds the message to Kafka service while dropping **10%** of them.
