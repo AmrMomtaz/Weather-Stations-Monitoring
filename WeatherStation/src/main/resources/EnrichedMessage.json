@@ -1,0 +1,11 @@
+{
+	"station_id":17,
+	"weather":{
+		"temperature":83,
+		"humidity":81,
+		"wind_speed":12
+	},
+	"s_no":24,
+	"status_timestamp":1689523200,
+	"battery_status":"high"
+}
