@@ -74,3 +74,5 @@ The weather station performs the following steps:
 3) Enriches the message with the missing weather station state fields [**"Contents Enricher Pattern"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/DataEnricher.html).
 4) Stores invalid messages in a seperate channel [**"Invalid Message Channel"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/InvalidMessageChannel.html).
 5) Feeds the message to Kafka service while dropping **10%** of them.
+
+The API response, filtered message and enriched message are avaialable in the resources.
