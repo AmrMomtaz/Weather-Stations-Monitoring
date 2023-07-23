@@ -9,27 +9,29 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class BitcaskStore implements BitcaskAPI {
 
     // Constants
-    public static final long MAX_FILE_SIZE = 10000*1024; // The maximum size in bytes for each file segment
+    public static final long MAX_FILE_SIZE = 1*1024; // The maximum size in bytes for each file segment
+    public static final String DELETED_VALUE = "___DELETED___1019___"; // Determines that a certain key was deleted
     private static final Logger logger = LogManager.getLogger(BitcaskStore.class);
+
+    public enum OPTIONS {
+        READ_WRITE_OPTION,
+        SYNC_ON_PUT_OPTION
+    }
 
     // State variables
 
-
-    public BitcaskStore() {}
-
-
     @Override
-    public BitCaskHandle open(String directoryName, List<String> opts) {
-        // TODO: check that the directory is already created
-        return null;
-    }
-
-    @Override
-    public BitCaskHandle open(String directoryName) {
+    public BitCaskHandle open(String directoryName, List<OPTIONS> opts) {
+        boolean isReadOnly = true, isSyncOn = false;
+        if (opts != null) {
+            if (opts.contains(OPTIONS.READ_WRITE_OPTION)) isReadOnly = false;
+            if (opts.contains(OPTIONS.SYNC_ON_PUT_OPTION)) isSyncOn = true;
+        }
         File directory = new File(directoryName);
         if (! directory.exists()) {
             boolean created = directory.mkdirs();
@@ -39,11 +41,16 @@ public class BitcaskStore implements BitcaskAPI {
             }
         }
         try {
-            return new BitCaskHandle(directoryName);
+            return new BitCaskHandle(directoryName, isReadOnly, isSyncOn);
         } catch (Exception e) {
-            logger.error("Couldn't create a new bitcask handler");
+            logger.error("Couldn't initialize the bitcask handler");
             throw new RuntimeException();
         }
+    }
+
+    @Override
+    public BitCaskHandle open(String directoryName) {
+        return open(directoryName, null);
     }
 
     @Override
@@ -51,6 +58,7 @@ public class BitcaskStore implements BitcaskAPI {
         try {
             return bitCaskHandle.getValue(key);
         } catch (IOException e) {
+            logger.error("Couldn't get value for the following key (" + key + "). [" + e + "]");
             return null;
         }
     }
@@ -61,13 +69,14 @@ public class BitcaskStore implements BitcaskAPI {
             bitCaskHandle.addEntry(key, value);
             return true;
         } catch (Exception e) {
+            logger.error("Couldn't add new entry. [" + e + "]");
             return false;
         }
     }
 
     @Override
     public boolean delete(BitCaskHandle bitCaskHandle, String key) {
-        return false;
+        return this.put(bitCaskHandle, key, DELETED_VALUE);
     }
 
     @Override
@@ -75,12 +84,25 @@ public class BitcaskStore implements BitcaskAPI {
 
     @Override
     public boolean merge(BitCaskHandle bitCaskHandle) {
-        return false;
+        try {
+            bitCaskHandle.merge();
+            return true;
+        } catch (Exception e) {
+            logger.error("Couldn't merge the store. [" + e + "]");
+            return false;
+        }
     }
 
     @Override
     public boolean sync(BitCaskHandle bitCaskHandle) {
-        return false;
+        try {
+            bitCaskHandle.flush();
+            return true;
+        }
+        catch (Exception e) {
+            logger.error("Couldn't sync the handler. [" + e + "]");
+            return false;
+        }
     }
 
     @Override
@@ -89,7 +111,14 @@ public class BitcaskStore implements BitcaskAPI {
             bitCaskHandle.close();
             return true;
         } catch (Exception e) {
+            logger.error("Couldn't close the handler. [" + e + "]");
             return false;
         }
+    }
+
+    @Override
+    public void fold(BitCaskHandle bitCaskHandle,
+                     BiFunction<String, String, Void> function) {
+        bitCaskHandle.fold(function);
     }
 }

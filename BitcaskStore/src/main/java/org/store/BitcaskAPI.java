@@ -5,6 +5,7 @@
 package org.store;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * Declaration of the API described by the https://riak.com/assets/bitcask-intro.pdf.
@@ -19,7 +20,7 @@ public interface BitcaskAPI {
      * The directory must be readable and writable by this process, and
      * only one process may open a Bitcask with read write at a time.
      */
-    BitCaskHandle open(String directoryName, List<String> opts);
+    BitCaskHandle open(String directoryName, List<BitcaskStore.OPTIONS> opts);
 
     /**
      * Opens a new or existing Bitcask datastore for read-only access.
@@ -67,4 +68,9 @@ public interface BitcaskAPI {
      * Returns true if the operation is successful and false otherwise.
      */
     boolean close(BitCaskHandle bitCaskHandle);
+
+    /**
+     * Folds over all K/V pairs in a Bitcask datastore.
+     */
+    void fold(BitCaskHandle bitCaskHandle, BiFunction<String, String, Void> function);
 }
