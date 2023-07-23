@@ -80,7 +80,7 @@ The API response, filtered message and enriched message are avaialable in the re
 ## Bitcask Store
 
 Bitcask store is used to store the latest individual reading for each weather station. This implementation follows exactly the Bitcask [paper](https://riak.com/assets/bitcask-intro.pdf) and the API mentioned in it.
-However there are three points I've skipped in my implementation which are the following:
+However there are two points I've skipped in my implementation which are the following:
 1) There is no error detection and correction (CRC).
 2) There is no concurrency control over multiple instances on the same bitcask root directory.
 
