@@ -23,7 +23,7 @@ The system is composed of three stages:
 * **Data Acquisition:** multiple weather stations fetch data from the weather data service using _gRPC_ calls and feed a queueing service (Kafka) with their readings.
 * **Data Processing & Archiving:** The base central station is consuming the streamed
 data and archiving all data in the form of Parquet files.
-* **Indexing:** two variants of index are maintained
+* **Indexing:** two variants of index are maintained:
     * Key-value store (Bitcask) for the latest reading from each individual station.
     * ElasticSearch / Kibana that are running over the Parquet files.
  
@@ -76,3 +76,12 @@ The weather station performs the following steps:
 5) Feeds the message to Kafka service while dropping **10%** of them.
 
 The API response, filtered message and enriched message are avaialable in the resources.
+
+## Bitcask Store
+
+Bitcask store is used to store the latest individual reading for each weather station. This implementation follows exactly the Bitcask [paper](https://riak.com/assets/bitcask-intro.pdf) and the API mentioned in it.
+However there are three points I've skipped in my implementation which are the following:
+1) There is no error detection and correction (CRC).
+2) There is no concurrency control over multiple instances on the same bitcask root directory.
+
+The Bitcask store is connected to Kafka service to receive the weather message sent updates the weather stations value (consumer).
