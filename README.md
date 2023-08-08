@@ -79,9 +79,21 @@ The API response, filtered message and enriched message are avaialable in the re
 
 ## Bitcask Store
 
-Bitcask store is used to store the latest individual reading for each weather station. This implementation follows exactly the Bitcask [paper](https://riak.com/assets/bitcask-intro.pdf) and the API mentioned in it.
-However there are two points I've skipped in my implementation which are the following:
-1) There is no error detection and correction (CRC).
-2) There is no concurrency control over multiple instances on the same bitcask root directory.
+Bitcask store is used to store the latest individual reading for each weather station. This implementation follows exactly the Bitcask [paper](https://riak.com/assets/bitcask-intro.pdf) and its mentioned API.
+However there are two points I've skipped in my implementation which are:
+1) No error detection and correction (CRC).
+2) No concurrency control over multiple instances on the same bitcask root directory.
 
-The Bitcask store is connected to Kafka service to receive the weather message sent updates the weather stations value (consumer).
+And for completness the merge function could be implemented much more effeciently by grouping and sorting records to be read and written sequentially instead of the random access currently implemented.
+
+When creating the Bitcask handler, you specify the store's root directory (if doesn't exist it will create it starting a new bitcask store). The data files are stored with the following naming format:
+```
+Data files:
+"epoch_{epoch_num}_{fileId}"
+Where the {epoch_num} determines the number of merges which have occured
+
+Hint files:
+"hint_epoch_{epoch_num}_{fileId}"
+Created after merge operations as described in the paper
+```
+The Bitcask store is connected to Kafka service and receives the weather messages sent to update the weather stations current states.
