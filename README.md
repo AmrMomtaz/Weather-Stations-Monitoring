@@ -81,8 +81,8 @@ The API response, filtered message and enriched message are avaialable in the re
 
 Bitcask store is used to store the latest individual reading for each weather station. This implementation follows exactly the Bitcask [paper](https://riak.com/assets/bitcask-intro.pdf) and its mentioned API.
 However there are two points I've skipped in my implementation which are:
-1) There is no error detection and correction (CRC).
-2) There is no concurrency control over multiple instances on the same bitcask root directory.
+1) No error detection and correction (CRC).
+2) No concurrency control over multiple instances on the same bitcask root directory.
 
 And for completness the merge function could be implemented much more effeciently by grouping and sorting records to be read and written sequentially instead of the random access currently implemented.
 
