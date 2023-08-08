@@ -35,7 +35,7 @@ public class BitCaskHandle {
         // Initializing the handler state
         File folder = new File(rootDir);
         if (folder.exists() && folder.isDirectory()) {
-            final Comparator<String> stringComparator = (s1, s2) -> {
+            final Comparator<String> pathComparator = (s1, s2) -> {
                 if (s1.length() < s2.length()) return -1;
                 else if (s1.length() > s2.length()) return 1;
                 else return s1.compareTo(s2);
@@ -51,15 +51,15 @@ public class BitCaskHandle {
                             .filter(fileName -> fileName.startsWith("epoch"))
                             .toList());
             if (hintFiles.size() != 0) { // Use hint files for fast recovery
-                hintFiles.sort(stringComparator);
+                hintFiles.sort(pathComparator);
                 String[] lastFileSegment = hintFiles.get(hintFiles.size()-1).split("_");
                 this.epoch = Integer.parseInt(lastFileSegment[2]);
                 int lastFileId = Integer.parseInt(lastFileSegment[3]);
                 for (int i = 1 ; i <= lastFileId ; i++) {
                     this.currentFileID = i;
                     try (DataInputStream dataInputStream = new DataInputStream
-                            (new BufferedInputStream(new FileInputStream("hint_" + getCurrentFileId())))) {
-                        while(dataInputStream.available() >= 0) {
+                            (new BufferedInputStream(new FileInputStream(getCurrentHintFileId())))) {
+                        while(dataInputStream.available() > 0) {
                             HintRecord hintRecord = readNextHintRecord(dataInputStream);
                             String fileId = getCurrentFileId();
                             int valueSize = hintRecord.valueSize();
@@ -72,7 +72,7 @@ public class BitCaskHandle {
                 }
             }
             else if (dataFiles.size() != 0) { // No hint files are available so
-                dataFiles.sort(stringComparator);
+                dataFiles.sort(pathComparator);
                 String[] lastFileSegment = dataFiles.get(dataFiles.size()-1).split("_");
                 this.epoch = Integer.parseInt(lastFileSegment[1]);
                 int lastFileId = Integer.parseInt(lastFileSegment[2]);
@@ -200,6 +200,16 @@ public class BitCaskHandle {
             if (! file.delete()) throw new RuntimeException("Couldn't delete file " + file.getName());
 
         // Creating Hint files
+        for (Map.Entry<String, KeyDirRecord> entry : this.keyDir.entrySet()) {
+            String key = entry.getKey();
+            int timestamp = entry.getValue().timestamp();
+            int keySize = key.getBytes().length;
+            int valueSize = entry.getValue().valueSize();
+            int valuePosition = entry.getValue().valuePosition();
+            HintRecord hintRecord = new HintRecord(timestamp, keySize, valueSize, valuePosition, key);
+            String hintFileId = this.rootDir + "/hint_" + entry.getValue().fileId().substring(this.rootDir.length()+1);
+            writeHintRecord(hintRecord, hintFileId);
+        }
     }
 
     /**
@@ -232,6 +242,10 @@ public class BitCaskHandle {
     }
     private String getCurrentFileId() {
         return this.rootDir + "/epoch_" + this.epoch + "_" + currentFileID;
+    }
+
+    private String getCurrentHintFileId() {
+        return this.rootDir + "/hint_epoch_" + this.epoch + "_" + currentFileID;
     }
 
     /**
@@ -267,6 +281,19 @@ public class BitCaskHandle {
         int valuePosition = inputStream.readInt();
         String key = new String(inputStream.readNBytes(keySize));
         return new HintRecord(timestamp, keySize, valueSize, valuePosition, key);
+    }
+
+    /**
+     * Writes a hint record given the hint file ID
+     */
+    private void writeHintRecord(HintRecord hintRecord, String hintFileId) throws IOException {
+        try (DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(hintFileId, true))) {
+            outputStream.writeInt(hintRecord.timestamp());
+            outputStream.writeInt(hintRecord.keySize());
+            outputStream.writeInt(hintRecord.valueSize());
+            outputStream.writeInt(hintRecord.valuePosition());
+            outputStream.writeBytes(hintRecord.key());
+        }
     }
 
     //

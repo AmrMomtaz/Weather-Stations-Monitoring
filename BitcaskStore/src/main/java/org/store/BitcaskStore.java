@@ -44,7 +44,7 @@ public class BitcaskStore implements BitcaskAPI {
             return new BitCaskHandle(directoryName, isReadOnly, isSyncOn);
         } catch (Exception e) {
             logger.error("Couldn't initialize the bitcask handler");
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
