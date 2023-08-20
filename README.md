@@ -96,4 +96,4 @@ Hint files:
 "hint_epoch_{epoch_num}_{fileId}"
 Created after merge operations as described in the paper
 ```
-The Bitcask store is connected to Kafka service and receives the weather messages sent to update the weather stations current states.
+The Bitcask store is imported as a dependency module in the base central station.
