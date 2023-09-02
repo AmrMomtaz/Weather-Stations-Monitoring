@@ -2,7 +2,10 @@
  * Created by Amr Momtaz.
  */
 
-package org.store;
+package org.api;
+
+import org.store.BitCaskHandle;
+import org.store.BitcaskStoreImpl;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -10,7 +13,15 @@ import java.util.function.BiFunction;
 /**
  * Declaration of the API described by the https://riak.com/assets/bitcask-intro.pdf.
  */
-public interface BitcaskAPI {
+public interface BitcaskStore {
+
+    // Provides options when creating { @link BitCaskHandle }
+    enum OPTIONS {
+        // provides read/write to the handler
+        READ_WRITE_OPTION,
+        // always flush the output stream after each write
+        SYNC_ON_PUT_OPTION
+    }
 
     /**
      * Opens a new or existing Bitcask datastore with additional options.
@@ -20,7 +31,7 @@ public interface BitcaskAPI {
      * The directory must be readable and writable by this process, and
      * only one process may open a Bitcask with read write at a time.
      */
-    BitCaskHandle open(String directoryName, List<BitcaskStore.OPTIONS> opts);
+    BitCaskHandle open(String directoryName, List<OPTIONS> opts);
 
     /**
      * Opens a new or existing Bitcask datastore for read-only access.

@@ -88,7 +88,7 @@ public class BitCaskHandle {
                             int valuePosition = currentPosition + 12 + dataRecord.keySize();
                             int timestamp = dataRecord.timestamp();
                             currentPosition += 12 + dataRecord.keySize() + dataRecord.valueSize();
-                            if (dataRecord.value().equals(BitcaskStore.DELETED_VALUE))
+                            if (dataRecord.value().equals(BitcaskStoreImpl.DELETED_VALUE))
                                 this.keyDir.remove(dataRecord.key());
                             else this.keyDir.put(dataRecord.key(),
                                     new KeyDirRecord(fileId, valueSize, valuePosition, timestamp));
@@ -117,7 +117,7 @@ public class BitCaskHandle {
                 if (actualSkipped != keyDirRecord.valuePosition()) throw new RuntimeException();
                 value = new String(is.readNBytes(keyDirRecord.valueSize()));
             }
-            return value.equals(BitcaskStore.DELETED_VALUE) ? null : value;
+            return value.equals(BitcaskStoreImpl.DELETED_VALUE) ? null : value;
         }
     }
 
@@ -127,7 +127,7 @@ public class BitCaskHandle {
     void addEntry(String key, String value) throws IOException {
         if (this.isReadOnly) throw new RuntimeException("Handler has no write permission");
         else if (this.dataOutputStream == null) updateDataOutputStream();
-        else if (this.dataOutputStream.size() >= BitcaskStore.MAX_FILE_SIZE) {
+        else if (this.dataOutputStream.size() >= BitcaskStoreImpl.MAX_FILE_SIZE) {
             this.dataOutputStream.close();
             this.currentFileID++;
             updateDataOutputStream();
@@ -184,7 +184,7 @@ public class BitCaskHandle {
         this.keyDir.keySet().forEach(key -> {
             try {
                 String value = getValue(key);
-                if (! value.equals(BitcaskStore.DELETED_VALUE)) this.addEntry(key, value);
+                if (! value.equals(BitcaskStoreImpl.DELETED_VALUE)) this.addEntry(key, value);
                 else this.keyDir.remove(key);
             } catch (IOException e) {
                 throw new RuntimeException(e);

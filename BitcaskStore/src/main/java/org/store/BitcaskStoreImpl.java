@@ -6,24 +6,18 @@ package org.store;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.api.BitcaskStore;
 
 import java.io.*;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class BitcaskStore implements BitcaskAPI {
+public class BitcaskStoreImpl implements BitcaskStore {
 
     // Constants
     public static final long MAX_FILE_SIZE = 10*1024; // The maximum size in bytes for each file segment
     public static final String DELETED_VALUE = "___DELETED___1019___"; // Determines that a certain key was deleted
-    private static final Logger logger = LogManager.getLogger(BitcaskStore.class);
-
-    public enum OPTIONS {
-        // provides read/write to the handler
-        READ_WRITE_OPTION,
-        // always flush the output stream after each write
-        SYNC_ON_PUT_OPTION
-    }
+    private static final Logger logger = LogManager.getLogger(BitcaskStoreImpl.class);
 
     @Override
     public BitCaskHandle open(String directoryName, List<OPTIONS> opts) {
