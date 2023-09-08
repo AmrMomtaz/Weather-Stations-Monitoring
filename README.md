@@ -44,6 +44,8 @@ Important notes:
 * Both the "weather data service" and the "weather station" uses the same exact protobuf schema.
 * This service only fetches the response and and sends it back to the station after parsing it to match the protobuf schema. And it doesn't add, remove or change any data on the received response.
 
+To build the jar, go to the project's directory and run ```mvn clean package``` and it will be build in the target dicrectory with name _WeatherDataService-1.0-SNAPSHOT-jar-with-dependencies.jar_
+
 ## Weather Station
 
 Each weather station outputs a status message every **1 second** to report its sampled
@@ -75,7 +77,8 @@ The weather station performs the following steps:
 4) Stores invalid messages in a seperate channel [**"Invalid Message Channel"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/InvalidMessageChannel.html).
 5) Feeds the message to Kafka service while dropping **10%** of them.
 
-The API response, filtered message and enriched message are avaialable in the resources.
+The API response, filtered message and enriched message's are avaialable in the project's resources.<br>
+To build the jar, go to the project's directory and run ```mvn clean package``` and it will be build in the target dicrectory with name _WeatherStation-1.0-SNAPSHOT-shaded.jar_
 
 ## Bitcask Store
 
