@@ -7,8 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="BaseCentralStation" />
-        <module name="BitcaskStore" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="BitcaskStore" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

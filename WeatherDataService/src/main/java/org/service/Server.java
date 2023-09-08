@@ -29,7 +29,8 @@ public final class Server extends org.service.WeatherDataServiceGrpc.WeatherData
         logger.info("Received weather data request from client {" + request.getClientId() + "}");
         JSONObject jsonResponse = fetchData();
 
-        if (jsonResponse == null) logger.error("Couldn't fetch data for the request sent by client {" + request.getClientId() + "}");
+        if (jsonResponse == null) logger.error("Internet connection failure." +
+                "Couldn't fetch data for the request sent by client {" + request.getClientId() + "}.");
         else {
             WeatherDataOuterClass.WeatherData weatherData = parseJsonData(jsonResponse);
             responseObserver.onNext(weatherData);

@@ -5,21 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0452696-bdae-4a0e-93f5-bab108b058b9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/service/BaseCentralStation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../BitcaskStore/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BitcaskStore/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BitcaskStore/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BitcaskStore/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BitcaskStore/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BitcaskStore/src/main/java/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BitcaskStore/src/main/java/org/store/BitCaskHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/../BitcaskStore/src/main/java/org/store/BitCaskHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BitcaskStore/src/main/java/org/store/BitcaskAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/../BitcaskStore/src/main/java/org/api/BitcaskStore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BitcaskStore/src/main/java/org/store/BitcaskStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/../BitcaskStore/src/main/java/org/store/BitcaskStoreImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WeatherDataService/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../WeatherDataService/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WeatherDataService/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../WeatherDataService/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/service/BaseCentralStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/service/BaseCentralStation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/service/BaseCentralStation.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/service/BaseCentralStation.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WeatherDataService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../WeatherDataService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WeatherStation/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../WeatherStation/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WeatherStation/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../WeatherStation/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WeatherDataService/src/main/java/org/service/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WeatherDataService/src/main/java/org/service/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WeatherStation/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../WeatherStation/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WeatherStation/src/main/java/org/service/WeatherDataServiceConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WeatherStation/src/main/java/org/service/WeatherDataServiceConnector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WeatherStation/src/main/java/org/service/WeatherStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WeatherStation/src/main/java/org/service/WeatherStation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -49,19 +45,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "jdk.selected.JAVA_MODULE": "17",
-    "last_opened_file_path": "/home/momtaz/Documents/Weather-Stations-Monitoring/BaseCentralStation",
-    "onboarding.tips.debug.path": "/home/momtaz/Documents/Weather-Stations-Monitoring/BaseCentralStation/src/main/java/org/example/Main.java",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/momtaz/Documents/Weather-Stations-Monitoring/BitcaskStore&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/home/momtaz/Documents/Weather-Stations-Monitoring/BaseCentralStation/src/main/java/org/example/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.BaseCentralStation">
     <configuration name="BaseCentralStation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.service.BaseCentralStation" />

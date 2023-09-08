@@ -23,32 +23,36 @@ public final class WeatherStation {
 
     // Constants
     private static final Integer COOLDOWN = 1000; // Weather station cool-down in ms
-    private static final String KAFKA_SERVER_CONFIGS = "localhost:9092";
+    private static final String KAFKA_SERVER_CONFIGS = "127.0.0.1:9092";
     private static final String KAFKA_TOPIC = "weather_data_topic";
     private static final Properties kafkaProperties;
-    private static final Random random;
-
-    private static final Logger logger;
+    private static final Random random = new Random(System.currentTimeMillis());
+    private static final Logger logger = LogManager.getLogger(WeatherStation.class);
+    public static final Long stationID;
 
     // Weather Station State Variables
-    public static Long stationID;
-    public static Integer sequenceNumber;
+    public static Integer sequenceNumber = 1;
     public static String batteryStatus;
-
-    private static char[] batteryStatusRandomArray;
-    private static int batteryStatusRandomArrayIdx;
+    private static final char[] batteryStatusRandomArray = new char[100];
+    private static int batteryStatusRandomArrayIdx = 0;
 
     static {
+        stationID = random.nextLong();
+        logger.info("Current station ID is: " + stationID);
+
+        for (int i = 0 ; i < 30 ; i++) batteryStatusRandomArray[i] = 'L';
+        for (int i = 30 ; i < 70 ; i++) batteryStatusRandomArray[i] = 'M';
+        for (int i = 70 ; i < 100 ; i++) batteryStatusRandomArray[i] = 'H';
+        shuffleCharArray(batteryStatusRandomArray);
+        batteryStatus = getBatteryStatusAndUpdateState();
+
         kafkaProperties = new Properties();
         kafkaProperties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_SERVER_CONFIGS);
         kafkaProperties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         kafkaProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        logger = LogManager.getLogger(WeatherStation.class);
-        random = new Random(17);
     }
 
     public static void main(String[] args) throws InterruptedException {
-        initializeStation(args);
         try (KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProperties)) {
             while (true) {
                 JSONObject apiResponse = WeatherDataServiceConnector.getWeatherData();
@@ -69,21 +73,6 @@ public final class WeatherStation {
     }
 
     // Private Methods
-
-    /**
-     * Initializes the weather station state variables.
-     */
-    private static void initializeStation(String[] args) {
-        stationID = Long.parseLong(args[0]);
-        sequenceNumber = 1;
-        batteryStatusRandomArray = new char[100];
-        for (int i = 0 ; i < 30 ; i++) batteryStatusRandomArray[i] = 'L';
-        for (int i = 30 ; i < 70 ; i++) batteryStatusRandomArray[i] = 'M';
-        for (int i = 70 ; i < 100 ; i++) batteryStatusRandomArray[i] = 'H';
-        shuffleCharArray(batteryStatusRandomArray);
-        batteryStatusRandomArrayIdx = 0;
-        batteryStatus = getBatteryStatusAndUpdateState();
-    }
 
     /**
      * Updates the weather station's state.
