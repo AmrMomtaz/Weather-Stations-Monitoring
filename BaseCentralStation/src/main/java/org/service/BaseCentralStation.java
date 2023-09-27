@@ -55,7 +55,7 @@ public class BaseCentralStation {
                     logger.debug(response);
 
                     // Storing the response in the bitcask store
-                    bitcaskStore.put(bitcaskHandle, response.getString("station_id"), response.toString());
+                    bitcaskStore.put(bitcaskHandle, String.valueOf(response.getLong("station_id")), response.toString());
 
                     //
                 }

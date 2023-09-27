@@ -23,7 +23,7 @@ public final class WeatherStation {
 
     // Constants
     private static final Integer COOLDOWN = 1000; // Weather station cool-down in ms
-    private static final String KAFKA_SERVER_CONFIGS = "127.0.0.1:9092";
+    private static final String KAFKA_SERVER_CONFIGS = "localhost:9092";
     private static final String KAFKA_TOPIC = "weather_data_topic";
     private static final Properties kafkaProperties;
     private static final Random random = new Random(System.currentTimeMillis());

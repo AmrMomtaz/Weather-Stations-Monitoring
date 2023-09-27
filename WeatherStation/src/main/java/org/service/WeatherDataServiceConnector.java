@@ -26,7 +26,7 @@ public final class WeatherDataServiceConnector {
      * Makes rpc call to weather data service and returns its response.
      */
     private static WeatherDataOuterClass.WeatherData getWeatherDataObject() {
-        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("127.0.0.1", 6565).usePlaintext().build();
+        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 6565).usePlaintext().build();
         org.service.WeatherDataServiceGrpc.WeatherDataServiceBlockingStub blockingStub
                 = org.service.WeatherDataServiceGrpc.newBlockingStub(managedChannel);
         return blockingStub.getWeatherData(org.service.WeatherDataOuterClass.WeatherDataRequest

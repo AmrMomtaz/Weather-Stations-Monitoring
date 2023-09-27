@@ -35,10 +35,11 @@ public final class ContentsFilter {
         JSONArray timeArray = apiMessage.getJSONObject("hourly").getJSONArray("time");
         JSONArray humidityArray = apiMessage.getJSONObject("hourly").getJSONArray("relativehumidity_2m");
         int idx = -1;
+        long minimumAbsoluteDifference = Long.MAX_VALUE;
         for (int i = 0 ; i < 24 ; i++) {
-            if (timeArray.getLong(i) == currentTimeStamp) {
+            if (Math.abs(timeArray.getLong(i) - currentTimeStamp) < minimumAbsoluteDifference) {
                 idx = i;
-                break;
+                minimumAbsoluteDifference = Math.abs(timeArray.getLong(i) - currentTimeStamp);
             }
         }
         return humidityArray.getInt(idx);
