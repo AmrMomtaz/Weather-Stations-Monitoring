@@ -1,0 +1,34 @@
+{
+  "type": "record",
+  "name": "Record",
+  "fields": [
+    {
+      "name": "Temperature",
+      "type": "int"
+    },
+    {
+      "name": "Station_ID",
+      "type": "long"
+    },
+    {
+      "name": "Humidity",
+      "type": "int"
+    },
+    {
+      "name": "Wind_Speed",
+      "type": "int"
+    },
+    {
+      "name": "Battery_Status",
+      "type": "string"
+    },
+    {
+      "name": "Timestamp",
+      "type": "long"
+    },
+    {
+      "name": "Sequence_Number",
+      "type": "long"
+    }
+  ]
+}

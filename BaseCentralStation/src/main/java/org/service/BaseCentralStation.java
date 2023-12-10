@@ -21,7 +21,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-
+/**
+ * Represents the base central station.
+ */
 public class BaseCentralStation {
 
     private static final BitcaskStore bitcaskStore;
@@ -45,6 +47,7 @@ public class BaseCentralStation {
         bitcaskStore = new BitcaskStoreImpl();
         bitcaskHandle = bitcaskStore.open(BITCASK_ROOT_DIRECTORY,  List.of(BitcaskStore.OPTIONS.READ_WRITE_OPTION));
     }
+
     public static void main(String[] args) {
         try (KafkaConsumer<String, String> consumer = new KafkaConsumer<>(kafkaProperties)) {
             consumer.subscribe(Collections.singletonList(KAFKA_TOPIC));
@@ -57,7 +60,8 @@ public class BaseCentralStation {
                     // Storing the response in the bitcask store
                     bitcaskStore.put(bitcaskHandle, String.valueOf(response.getLong("station_id")), response.toString());
 
-                    //
+                    // Writing records to parquet files
+                    ParquetWriterManager.writeParquetRecord(response);
                 }
             }
         }
