@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0452696-bdae-4a0e-93f5-bab108b058b9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/service/ParquetWriterManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/AvroSchema.avsc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/service/ElasticsearchManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/service/BaseCentralStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/service/BaseCentralStation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/service/ParquetWriterManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/service/ParquetWriterManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +61,7 @@
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.BaseCentralStation">
+  <component name="RunManager" selected="Application.ElasticsearchManager">
     <configuration name="BaseCentralStation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.service.BaseCentralStation" />
       <module name="BaseCentralStation" />
@@ -75,21 +75,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.example.Main" />
-      <module name="BaseCentralStation" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.example.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ParquetWriterTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.service.ParquetWriterTest" />
+    <configuration name="ElasticsearchManager" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.service.ElasticsearchManager" />
       <module name="BaseCentralStation" />
       <extension name="coverage">
         <pattern>
@@ -103,9 +90,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ElasticsearchManager" />
         <item itemvalue="Application.BaseCentralStation" />
-        <item itemvalue="Application.ParquetWriterTest" />
-        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -127,6 +113,10 @@
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
           <line>15</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/service/BaseCentralStation.java</url>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -39,3 +39,4 @@ build/
 
 bitcask_store/
 target/
+parquet_data/

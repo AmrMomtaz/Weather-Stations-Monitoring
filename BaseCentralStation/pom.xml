@@ -68,6 +68,12 @@
             <artifactId>json</artifactId>
             <version>20231013</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>7.17.15</version>
+        </dependency>
     </dependencies>
 
 </project>

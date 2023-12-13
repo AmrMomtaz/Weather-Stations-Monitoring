@@ -31,10 +31,11 @@ public class ParquetWriterManager {
     // Constants
     private static final Logger logger;
     private static final Schema AVRO_SCHEMA;
-    private static final int MAXIMUM_OF_RECORDS_IN_PARQUET_FILE;
+    private static final int MAXIMUM_OF_RECORDS_IN_PARQUET_FILE = 50;
 
     // State variables
     private static ParquetWriter<GenericRecord> parquetWriter;
+    private static String parquetFilePath;
     private static int currentRecordIdx;
 
     static {
@@ -46,7 +47,6 @@ public class ParquetWriterManager {
             logger.error("Couldn't find the AVRO Schema");
             throw new RuntimeException(e);
         }
-        MAXIMUM_OF_RECORDS_IN_PARQUET_FILE = 10;
         resetParquetWriter();
     }
 
@@ -113,10 +113,14 @@ public class ParquetWriterManager {
      */
     private static void resetParquetWriter() {
         try {
-            if (parquetWriter != null) parquetWriter.close();
+            if (parquetWriter != null) {
+                parquetWriter.close();
+                ElasticsearchManager.importDataToElasticsearch(parquetFilePath);
+            }
             currentRecordIdx = 0;
+            parquetFilePath = "parquet_data/" + System.currentTimeMillis() + ".parquet";
             parquetWriter = AvroParquetWriter
-                    .<GenericRecord>builder(new Path(System.currentTimeMillis() + ".parquet"))
+                    .<GenericRecord>builder(new Path(parquetFilePath))
                     .withConf(new Configuration())
                     .withCompressionCodec(CompressionCodecName.SNAPPY)
                     .withSchema(AVRO_SCHEMA)

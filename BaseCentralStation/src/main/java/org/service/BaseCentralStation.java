@@ -26,10 +26,10 @@ import java.util.Properties;
  */
 public class BaseCentralStation {
 
+    private static final Logger logger;
     private static final BitcaskStore bitcaskStore;
     private static final BitCaskHandle bitcaskHandle;
     private static final Properties kafkaProperties;
-    private static final Logger logger;
     private static final String KAFKA_TOPIC = "weather_data_topic";
     private static final String KAFKA_SERVER_CONFIGS = "localhost:9092";
     private static final String CONSUMER_GROUP_ID = "base_central_station";
@@ -57,10 +57,10 @@ public class BaseCentralStation {
                     JSONObject response = new JSONObject(consumerRecord.value());
                     logger.debug(response);
 
-                    // Storing the response in the bitcask store
+                    // Stores the response in the bitcask store
                     bitcaskStore.put(bitcaskHandle, String.valueOf(response.getLong("station_id")), response.toString());
 
-                    // Writing records to parquet files
+                    // Writes records to parquet file
                     ParquetWriterManager.writeParquetRecord(response);
                 }
             }
