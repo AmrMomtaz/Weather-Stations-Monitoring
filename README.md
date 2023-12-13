@@ -13,7 +13,7 @@ The "Things" are huge in count and emit messages in very high frequency which fl
 global internet. Hence, efficient stream processing is inevitable.
 
 One use case is the distributed weather stations use case. Each "**weather station**" emits
-readings for the current weather status to the "**central base station**" for persistence and
+readings for the current weather status to the "**base central station**" for persistence and
 analysis. In this project, the architecture of a weather monitoring system is implemented using 
 microservices.
 
@@ -53,7 +53,7 @@ weather status. The weather message have the following schema:
 
 ```yaml
 {
-   "station_id": 1, # Long
+   "station_id": 1, # Long (randomly generared)
    "s_no": 1, # Long auto-incremental with each message per service
    "battery_status": "low", # String of (low, medium, high)
    "status_timestamp": 1681521224, # Long Unix timestamp
@@ -78,7 +78,14 @@ The weather station performs the following:
 5) Feeds the message to Kafka service (while dropping **10%** of them).
 
 The API response, filtered message and enriched message's are avaialable in the project's resources.<br>
-To build the jar, go to the project's directory and run ```mvn clean package``` and it will be build in the target's dicrectory with name _WeatherStation-1.0-SNAPSHOT-shaded.jar_
+To build the jar, go to the project's directory and run ```mvn clean package``` and it will be build in the target's dicrectory with name _WeatherStation-1.0-SNAPSHOT-shaded.jar_.
+
+## Base Central Station
+
+The base central station consumes the streamed data from Kafka and persists the data in **Bitcask Store** where it keeps the latest reading of each weather station in the store (as described in the next section).<br><br>
+It also persists the data in **Elasticsearch** by archiving all the weather statuses history for the all stations in parquet files partitioned by time which is then imported in Elasticsearch.
+The parquet files are written in the _parquet_data_ directory and they are named as following: ```{timestamp of the first received weather status}.parquet```. Each parquet file contains **1,000** weather messages.
+
 
 ## Bitcask Store
 
