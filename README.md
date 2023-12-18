@@ -83,13 +83,14 @@ To build the jar, go to the project's directory and run ```mvn clean package``` 
 ## Base Central Station
 
 The base central station consumes the streamed data from Kafka and persists the data in **Bitcask Store** where it keeps the latest reading of each weather station in the store (as described in the next section).<br><br>
-It also persists the data in **Elasticsearch** by archiving all the weather statuses history for the all stations in parquet files partitioned by time which is then imported in Elasticsearch.
-The parquet files are written in the _parquet_data_ directory and they are named as following: ```{timestamp of the first received weather status}.parquet```. Each parquet file contains **1,000** weather messages.
+It also persists the data in **Elasticsearch** archiving all the weather statuses history for the all stations in parquet files partitioned by time which is then imported in Elasticsearch.
+Each parquet file contains **1,000** weather messages. The parquet files are written in the _parquet_data_ directory and they are named by the timestamp of the first received weather status.
+After receiving the 1,000 weather messages, the parquet file is flushed and all its data is bulk imported into elasticsearch.
 
 
 ## Bitcask Store
 
-Bitcask store is used to store the latest individual reading for each weather station. This implementation follows exactly the Bitcask [paper](https://riak.com/assets/bitcask-intro.pdf).
+Bitcask store is used to store the latest individual reading for each weather station. This implementation follows exactly the Bitcask [paper](https://riak.com/assets/bitcask-intro.pdf) where the segment's size is **1,000 KB**. 
 However, there are two points I've skipped in my implementation which are:
 1) No error detection and correction (CRC).
 2) No concurrency control over multiple instances on the same bitcask root directory.
