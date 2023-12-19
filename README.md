@@ -86,8 +86,9 @@ The base central station consumes the streamed data from Kafka (polls the data e
 
 It also persists the data in **Elasticsearch** archiving all the weather statuses history for the all stations in parquet files partitioned by time which is then imported in Elasticsearch.
 Each parquet file contains **1,000** weather messages. The parquet files are written in the _parquet_data_ directory and they are named by the timestamp of the first received weather status.
-After receiving the 1,000 weather messages, the parquet file is flushed and all its data is bulk imported into elasticsearch in the _"weather_data"_ index.<br>
-To build the jar, go to the project's directory and run ```mvn clean package``` and the jar will be located in the target's directory with name _BaseCentralStation-1.0-SNAPSHOT-shaded.jar_.
+After receiving 1,000 weather messages, the parquet file is flushed and all its data is bulk imported into elasticsearch in the _"weather_data"_ index.<br>
+
+To build the jar, go to the project's directory and run ```mvn clean package``` and the jar will be created in the target's directory named _BaseCentralStation-1.0-SNAPSHOT-shaded.jar_.
 
 
 ## Bitcask Store
