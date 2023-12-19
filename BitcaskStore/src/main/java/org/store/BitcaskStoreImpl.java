@@ -15,7 +15,7 @@ import java.util.function.BiFunction;
 public class BitcaskStoreImpl implements BitcaskStore {
 
     // Constants
-    public static final long MAX_FILE_SIZE = 10*1024; // The maximum size in bytes for each file segment
+    public static final long MAX_FILE_SIZE = 1000*1024; // The maximum size in bytes for each file segment
     public static final String DELETED_VALUE = "___DELETED___1019___"; // Determines that a certain key was deleted
     private static final Logger logger = LogManager.getLogger(BitcaskStoreImpl.class);
 

@@ -59,7 +59,7 @@ public class ElasticsearchManager {
             parquetReader.close();
 
             BulkResponse bulkResponse = elasticsearchClient.bulk(bulkRequest, RequestOptions.DEFAULT);
-            if (! bulkResponse.hasFailures()) logger.debug("Data imported to elasticsearch successfully" );
+            if (! bulkResponse.hasFailures()) logger.debug("Data imported to elasticsearch successfully.");
             else throw new RuntimeException(bulkResponse.buildFailureMessage());
         }
         catch (Exception e) {

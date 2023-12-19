@@ -55,7 +55,7 @@ public class BaseCentralStation {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, String> consumerRecord : records) {
                     JSONObject response = new JSONObject(consumerRecord.value());
-                    logger.debug(response);
+                    logger.debug("A new weather message is received: " + response);
 
                     // Stores the response in the bitcask store
                     bitcaskStore.put(bitcaskHandle, String.valueOf(response.getLong("station_id")), response.toString());

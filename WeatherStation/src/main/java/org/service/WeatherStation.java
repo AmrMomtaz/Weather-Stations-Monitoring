@@ -37,7 +37,7 @@ public final class WeatherStation {
     private static int batteryStatusRandomArrayIdx = 0;
 
     static {
-        stationID = random.nextLong();
+        stationID = Math.abs(random.nextLong());
         logger.info("Current station ID is: " + stationID);
 
         for (int i = 0 ; i < 30 ; i++) batteryStatusRandomArray[i] = 'L';

@@ -19,7 +19,6 @@ import org.apache.parquet.hadoop.ParquetWriter;
 import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -31,7 +30,7 @@ public class ParquetWriterManager {
     // Constants
     private static final Logger logger;
     private static final Schema AVRO_SCHEMA;
-    private static final int MAXIMUM_OF_RECORDS_IN_PARQUET_FILE = 50;
+    private static final int MAXIMUM_OF_RECORDS_IN_PARQUET_FILE = 1000;
 
     // State variables
     private static ParquetWriter<GenericRecord> parquetWriter;
@@ -41,8 +40,7 @@ public class ParquetWriterManager {
     static {
         logger = LogManager.getLogger(ParquetWriterManager.class);
         try {
-            AVRO_SCHEMA = Schema.parse(new File(Objects.requireNonNull
-                (ParquetWriterManager.class.getClassLoader().getResource("AvroSchema.avsc")).getFile()));
+            AVRO_SCHEMA = Schema.parse(ParquetWriterManager.class.getClassLoader().getResource("AvroSchema.avsc").openStream());
         } catch (IOException e) {
             logger.error("Couldn't find the AVRO Schema");
             throw new RuntimeException(e);
