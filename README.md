@@ -53,7 +53,7 @@ weather status. The weather message have the following schema:
 
 ```yaml
 {
-   "station_id": 1, # Long (randomly generared)
+   "station_id": 1, # Long (randomly generated)
    "s_no": 1, # Long auto-incremental with each message per service
    "battery_status": "low", # String of (low, medium, high)
    "status_timestamp": 1681521224, # Long Unix timestamp
