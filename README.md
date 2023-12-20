@@ -84,8 +84,13 @@ To build the jar, go to the project's directory and run ```mvn clean package``` 
 
 The base central station consumes the streamed data from Kafka (polls the data every 100ms) and persists the data in **Bitcask Store** where it keeps the latest reading of each weather station in the store (as described in the next section).<br>
 
-It also persists the data in **Elasticsearch** archiving all the weather statuses history for the all stations in parquet files partitioned by time which is then imported in Elasticsearch.
-Each parquet file contains **1,000** weather messages. The parquet files are written in the _parquet_data_ directory and they are named by the timestamp of the first received weather status.
+The central station flattens the incoming json objects and renames its fields (for better readability). It initializes the **_weather_data_** index in elasticsearch and configures its options and
+mappings using _**IndexConfigs.json**_ (found in the project's resources).<br>
+To write parquet records, the json objects are converted to **Avro** (using the avro schema defined in _**AvroSchema.avsc**_) 
+which are then written as Parquet records. This is because Parquet doesn't have its own set of Java objects. Instead, it reuses the objects from other formats, like Avro [(link)](https://stackoverflow.com/questions/39858856/json-object-to-parquet-format-using-java-without-converting-to-avrowithout-usin).<br>
+
+It persists the data in **Elasticsearch** archiving all the weather data history of the all stations in parquet files partitioned by time.
+Each parquet file contains **1,000** weather messages and it is stored in the _parquet_data_ directory and they are named after the timestamp of the first received weather message in this file.
 After receiving 1,000 weather messages, the parquet file is flushed and all its data is bulk imported into elasticsearch in the _"weather_data"_ index.<br>
 
 To build the jar, go to the project's directory and run ```mvn clean package``` and the jar will be created in the target's directory named _BaseCentralStation-1.0-SNAPSHOT-shaded.jar_.
