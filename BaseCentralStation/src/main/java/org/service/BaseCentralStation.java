@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Represents the base central station.
+ * Represents the base central station (driver code).
  */
 public class BaseCentralStation {
 

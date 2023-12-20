@@ -7,6 +7,7 @@ package org.service;
 import org.apache.http.HttpHost;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -18,7 +19,10 @@ import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.xcontent.XContentType;
+
+import java.io.IOException;
 
 /**
  * Manages the connection and imports data to Elasticsearch.
@@ -36,6 +40,13 @@ public class ElasticsearchManager {
             (RestClient.builder(new HttpHost("localhost", ELASTICSEARCH_PORT_NUMBER)).build())
             .setApiCompatibilityMode(true)
             .build();
+        try {
+            initElasticsearchIndex();
+        }
+        catch (IOException e) {
+            logger.error("Couldn't create the (" + INDEX_NAME + ") index.");
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -54,7 +65,7 @@ public class ElasticsearchManager {
 
             GenericRecord record;
             while ((record = parquetReader.read()) != null) {
-                bulkRequest.add(new IndexRequest(INDEX_NAME).source(record, XContentType.JSON));
+                bulkRequest.add(new IndexRequest(INDEX_NAME).source(record.toString(), XContentType.JSON));
             }
             parquetReader.close();
 
@@ -66,5 +77,26 @@ public class ElasticsearchManager {
             logger.error("Couldn't import parquet file data to elasticsearch");
             throw new RuntimeException(e);
         }
+    }
+
+    //
+    // Private Methods
+    //
+
+    /**
+     * Creates the weather data index in elasticsearch using the configurations in IndexConfigs.json if the
+     * index wasn't already created.
+     */
+    private static void initElasticsearchIndex() throws IOException {
+        boolean indexAlreadyExists
+            = elasticsearchClient.indices().exists(new GetIndexRequest(INDEX_NAME), RequestOptions.DEFAULT);
+        if (!indexAlreadyExists) {
+            CreateIndexRequest request = new CreateIndexRequest(INDEX_NAME);
+            String mappingSource = new String(ElasticsearchManager.class.getClassLoader()
+                .getResource("IndexConfigs.json").openStream().readAllBytes());
+            request.source(mappingSource, XContentType.JSON);
+            elasticsearchClient.indices().create(request, RequestOptions.DEFAULT);
+            logger.debug("Created index (" + INDEX_NAME + ") successfully.");
+        } else logger.debug("Index (" + INDEX_NAME + ") already exists");
     }
 }

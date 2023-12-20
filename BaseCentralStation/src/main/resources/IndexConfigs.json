@@ -1,0 +1,32 @@
+{ 
+    "settings" : {
+        "number_of_shards" : 1,
+        "number_of_replicas" : 0
+    }, 
+    "mappings" : {
+        "properties": {
+            "Temperature": {
+                "type": "integer"
+            },
+            "Station_ID": {
+                "type": "long"
+            },
+            "Humidity": {
+                "type": "integer"
+            },
+            "Wind_Speed": {
+                "type": "integer"
+            },
+            "Battery_Status": {
+                "type": "keyword"
+            },
+            "Timestamp": {
+                "type": "long"
+            },
+            "Sequence_Number": {
+                "type": "long"
+            }
+        }
+    },
+    "aliases" : {}
+}

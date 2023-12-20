@@ -40,7 +40,8 @@ public class ParquetWriterManager {
     static {
         logger = LogManager.getLogger(ParquetWriterManager.class);
         try {
-            AVRO_SCHEMA = Schema.parse(ParquetWriterManager.class.getClassLoader().getResource("AvroSchema.avsc").openStream());
+            AVRO_SCHEMA = Schema.parse(ParquetWriterManager.class.getClassLoader()
+                .getResource("AvroSchema.avsc").openStream());
         } catch (IOException e) {
             logger.error("Couldn't find the AVRO Schema");
             throw new RuntimeException(e);
