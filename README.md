@@ -12,7 +12,7 @@ The Internet of Things (IoT) is an important source of data streams in the moder
 The "Things" are huge in count and emit messages in very high frequency which flood the
 global internet. Hence, efficient stream processing is inevitable.
 
-One use case is the distributed weather stations use case. Each "**weather station**" emits
+One use case is the distributed weather stations. Each "**weather station**" emits
 readings for the current weather status to the "**base central station**" for persistence and
 analysis. In this project, the architecture of a weather monitoring system is implemented using 
 microservices.
@@ -87,7 +87,7 @@ The base central station consumes the streamed data from Kafka (polls the data e
 The central station flattens the incoming json objects and renames its fields (for better readability). It initializes the **_weather_data_** index in elasticsearch and configures its options and
 mappings using _**IndexConfigs.json**_ (found in the project's resources).<br>
 To write parquet records, the json objects are converted to **Avro** (using the avro schema defined in _**AvroSchema.avsc**_) 
-which are then written as Parquet records. This is because Parquet doesn't have its own set of Java objects. Instead, it reuses the objects from other formats, like Avro [(link)](https://stackoverflow.com/questions/39858856/json-object-to-parquet-format-using-java-without-converting-to-avrowithout-usin).<br>
+which are then written as Parquet records. This is because Parquet doesn't have its own set of Java objects. Instead, it reuses the objects from other formats like Avro [(link)](https://stackoverflow.com/questions/39858856/json-object-to-parquet-format-using-java-without-converting-to-avrowithout-usin).<br>
 
 It persists the data in **Elasticsearch** archiving all the weather data history of the all stations in parquet files partitioned by time.
 Each parquet file contains **1,000** weather messages and it is stored in the _parquet_data_ directory and they are named after the timestamp of the first received weather message in this file.
@@ -116,3 +116,17 @@ Hint files:
 Created after merge operations as described in the paper
 ```
 The Bitcask store is imported as a dependency in the base central station (you must run ```mvn install``` in the project's directory so it would be available in your local maven repository).
+
+## Elasticsearch & Kibana
+
+[**Elasticsearch**](https://www.elastic.co/) is a search engine based on the Lucene library. It provides a distributed, multitenant-capable full-text search engine with an HTTP web interface 
+and schema-free JSON documents. 
+
+
+## Deployement (Docker & Kuberneets)
+
+System configs.
+
+### Docker
+
+### Kuberneets
