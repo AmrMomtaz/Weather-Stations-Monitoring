@@ -41,7 +41,7 @@ Provides the current weather data to the weather stations performing the followi
 
 Important notes:
 * The gRPC server runs on its default port 6565 (Can be changed in the source code).
-* Both the "weather data service" and the "weather station" use the same exact protobuf schema.
+* Both the "weather data service" and the "weather station" use the same exact protobuf schema (located in the project's resources).
 * This service only fetches the response and sends it back to the station after parsing it to match the protobuf schema. It doesn't modify any data from the received API response.
 
 To build the jar, go to the project's directory and run ```mvn clean package``` and it will be build in the target dicrectory with name _WeatherDataService-1.0-SNAPSHOT-jar-with-dependencies.jar_.
@@ -139,15 +139,22 @@ The record's count is 991 where the maximum sequence number is 1,109 which means
 
 This part describes the system configurations and the subsequent subsections describes the system's deployement.
 
-The default port numbers of each service is used as following:
+The **WeatherDataService** runs **SpringBootApplication** and the **gRPC** server. It fetches the data from open-meteo by sending a **GET** request and it makes five trials trying to fetch the data and in case of internet failure the service hangs.
+
+**Kafka** starts using **ZooKeeper** where the Kafka Broker config advertised.listeners is set to PLAINTEXT:localhost and its number of partitions is set to one. The Kafka topic's name which connects the weather stations with the base central stations is _"weather_data_topic"_ where the keys/values sent over kafka are serialized and deserialized using **StringSerializer**.
+
+The **BaseCentralStation** connects to Kafka using the group ID "base_central_station" and creates a new Bitcask handler with a root directory named _"bitcask_store"_. And it sets the index name in elasticsearch to _"weather_data"_
+
+
+The ports of each service are the following where all of them are exposed as they are:
 
 | **Service**       | **Port Number** |
-|---------------|-------------|
-| **gRPC**          | 6565        |
-| **ZooKeeper**     | 2181        |
-| **Kafka**         | 9092        |
-| **Elasticsearch** | 9200        |
-| **Kibana**        | 5601        |
+|-------------------|-----------------|
+| **gRPC**          |      6565       |
+| **ZooKeeper**     |      2181       |
+| **Kafka**         | 9092            |
+| **Elasticsearch** | 9200            |
+| **Kibana**        | 5601            |
 
 
 ### Docker
