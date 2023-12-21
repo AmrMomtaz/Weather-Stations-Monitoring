@@ -137,8 +137,21 @@ The record's count is 991 where the maximum sequence number is 1,109 which means
 
 ## Configurations & Deployment (Docker & Kuberneets)
 
-System configs.
+This part describes the system configurations and the subsequent subsections describes the deployement.
+
+The default port numbers of each service is used as following:
+
+| **Service**       | **Port Number** |
+|---------------|-------------|
+| **gRPC**          | 6565        |
+| **ZooKeeper**     | 2181        |
+| **Kafka**         | 9092        |
+| **Elasticsearch** | 9200        |
+| **Kibana**        | 5601        |
+
 
 ### Docker
+
+
 
 ### Kuberneets
