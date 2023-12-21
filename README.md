@@ -137,7 +137,7 @@ The record's count is 991 where the maximum sequence number is 1,109 which means
 
 ## Configurations & Deployment (Docker & Kuberneets)
 
-This part describes the system configurations and the subsequent subsections describes the deployement.
+This part describes the system configurations and the subsequent subsections describes the system's deployement.
 
 The default port numbers of each service is used as following:
 
