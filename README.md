@@ -85,7 +85,7 @@ To build the jar, go to the project's directory and run ```mvn clean package``` 
 The base central station consumes the streamed data from Kafka (polls the data every 100ms) and persists the data in **Bitcask Store** where it keeps the latest reading of each weather station in the store (as described in the next section).<br>
 
 The central station flattens the incoming json objects and renames its fields (for better readability). It initializes the **_weather_data_** index in elasticsearch and configures its options and
-mappings using _**IndexConfigs.json**_ (found in the project's resources).<br>
+mappings using _**IndexConfigs.json**_ (located in the project's resources).<br>
 To write parquet records, the json objects are converted to **Avro** (using the avro schema defined in _**AvroSchema.avsc**_) 
 which are then written as Parquet records. This is because Parquet doesn't have its own set of Java objects. Instead, it reuses the objects from other formats like Avro [(link)](https://stackoverflow.com/questions/39858856/json-object-to-parquet-format-using-java-without-converting-to-avrowithout-usin). Note that you must have **HADOOP_HOME** and **hadoop.home.dir** set in your enviroment variables.<br>
 
@@ -122,7 +122,7 @@ The Bitcask store is imported as a dependency in the base central station (you m
 [**Elasticsearch**](https://www.elastic.co/) is a search engine which provides a distributed, multitenant-capable full-text search engine with an HTTP web interface 
 and schema-free JSON documents. [**Kibana**](https://www.elastic.co/kibana) is a source-available data visualization dashboard software for Elasticsearch.<br>
 
-I've created a data view for the _weather_data_ index and deployed three weather stations and waited for three parquet files to be imported to elasticsearch and got the following results:
+I've created a data view for the _weather_data_ index and deployed three weather stations and waited for three parquet files (located in the BaseCentralStation's resources) to be imported to elasticsearch and got the following results:
 
 ![Screenshot from 2023-12-21 09-16-22](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/6f93c89b-182f-47c5-98bb-1f64b70ba03b)
 
