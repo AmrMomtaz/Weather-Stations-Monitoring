@@ -75,9 +75,9 @@ The weather station performs the following:
 2) Drops unused fields and filters the message [**"Contents Filter Pattern"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/ContentFilter.html).
 3) Enriches the message with the missing weather station state fields [**"Contents Enricher Pattern"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/DataEnricher.html).
 4) Stores invalid messages in a seperate channel [**"Invalid Message Channel"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/InvalidMessageChannel.html).
-5) Feeds the message to Kafka service (while dropping **10%** of them).
+5) Feeds the message to Kafka service (drops **10%** of them).
 
-The API response, filtered message and enriched message's are avaialable in the project's resources.<br>
+The API response, filtered message and enriched message's are located in the project's resources.<br>
 To build the jar, go to the project's directory and run ```mvn clean package``` and it will be build in the target's dicrectory with name _WeatherStation-1.0-SNAPSHOT-shaded.jar_.
 
 ## Base Central Station
