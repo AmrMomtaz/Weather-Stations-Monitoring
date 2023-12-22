@@ -141,20 +141,21 @@ This part describes the system configurations and the subsequent subsections des
 
 The **WeatherDataService** runs **SpringBootApplication** and the **gRPC** server. It fetches the data from open-meteo by sending a **GET** request and it makes five trials trying to fetch the data and in case of internet failure the service hangs.
 
-**Kafka** starts using **ZooKeeper** where the Kafka Broker config advertised.listeners is set to PLAINTEXT:localhost and its number of partitions is set to one. The Kafka topic's name which connects the weather stations with the base central stations is _"weather_data_topic"_ where the keys/values sent over kafka are serialized and deserialized using **StringSerializer**.
+**Kafka** starts using **ZooKeeper** where the Kafka Broker config advertised.listeners is set to PLAINTEXT:localhost and its number of partitions is set to one. The Kafka topic's name which connects the weather stations with the base central stations is _"weather_data_topic"_ where the keys/values are serialized and deserialized using **StringSerializer**.
 
-The **BaseCentralStation** connects to Kafka using the group ID "base_central_station" and creates a new Bitcask handler with a root directory named _"bitcask_store"_. And it sets the index name in elasticsearch to _"weather_data"_
+The **BaseCentralStation** connects to Kafka using the group ID "base_central_station" and creates a new Bitcask handler with a root directory named _"bitcask_store"_. And it sets the index name in elasticsearch to _"weather_data"_.
 
+**Elasticsearch & Kibana** runs with SSL/TLS mode **disabled** and elasticsearch forms a single node cluster.
 
-The ports of each service are the following where all of them are exposed as they are:
+The port/version of each service are the following (all the ports are exposed with the same number):
 
-| **Service**       | **Port Number** |
-|-------------------|-----------------|
-| **gRPC**          |      6565       |
-| **ZooKeeper**     |      2181       |
-| **Kafka**         | 9092            |
-| **Elasticsearch** | 9200            |
-| **Kibana**        | 5601            |
+| **Service**       | **Port Number** | **Version** |
+|:------------------|:---------------:|:-----------:|
+| **gRPC**          | 6565            | 4.7.1       |
+| **ZooKeeper**     | 2181            | 3.4.13      |
+| **Kafka**         | 9092            | 2.6.0       |
+| **Elasticsearch** | 9200            | 8.10.4      |
+| **Kibana**        | 5601            | 8.10.4      |
 
 
 ### Docker
