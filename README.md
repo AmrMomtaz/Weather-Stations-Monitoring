@@ -160,6 +160,35 @@ The port/version of each service are the following (all the ports are exposed wi
 
 ### Docker
 
+To build the images, go to the **_deployement_** directory in _WeatherDataService_, _WeatherStation_ & _BaseCentralStation_ and run the following command ```docker build -t <image-name> .``` replacing the \<image-name\> accordingly.
+
+Also, These images are hosted on [DockerHub](https://hub.docker.com/r/amrmomtaz/weather-stations-monitoring/tags) and they can be pulled directly.<br>
+The following [image](https://hub.docker.com/r/johnnypark/kafka-zookeeper/) is used for _Kafka_ including _Zookeeper_, and this [one](https://hub.docker.com/r/nshou/elasticsearch-kibana) for _Elasticsearch_ and _Kibana_.
+
+The following commands are used to run the containers:
+```bash
+# Run Kafka
+docker run -d --name Kafka -p 2181:2181 -p 9092:9092 -e ADVERTISED_HOST=localhost -e NUM_PARTITIONS=1 johnnypark/kafka-zookeeper
+
+# Run Kibana and Elasticsearch
+docker run -d --name Elasticsearch_Kibana -p 9200:9200 -p 5601:5601 -e SSL_MODE=false -e discovery.type=single-node nshou/elasticsearch-kibana
+
+# Run the WeatherDataService
+docker run -d --name WeatherDataService --network=host amrmomtaz/weather-stations-monitoring:weather-data-service
+
+# Run the WeatherStation
+docker run -d --name WeatherStation --network=host amrmomtaz/weather-stations-monitoring:weather-station
+
+# Run the BaseCentralStation
+docker run -d --name BaseCentralStation --network=host amrmomtaz/weather-stations-monitoring:base-central-station
+```
+Please note the following points in the previous scripts:
+* The commands' order must be maintained.
+* The _host_ network is used which can be changed (for security reasons) with a different one. The following command is used to create a network ```docker network create <my-bridge-network>```.
+* More weather stations can be created repeating the forth command changing the container's name.
+
+![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/f76763b5-eb40-43e5-9ad2-95f9b8eb9e22)
+
 
 
 ### Kuberneets
