@@ -185,7 +185,7 @@ docker run -d --name BaseCentralStation --network=host amrmomtaz/weather-station
 Please note the following points in the previous scripts:
 * The commands' order must be maintained.
 * The _host_ network is used which can be changed (for security reasons) with a different one. The following command is used to create a network ```docker network create <my-bridge-network>```.
-* More weather stations can be created repeating the forth command changing the container's name.
+* More weather stations can by running the forth command changing the container's name.
 
 ![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/f76763b5-eb40-43e5-9ad2-95f9b8eb9e22)
 
