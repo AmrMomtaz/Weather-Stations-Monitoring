@@ -182,13 +182,18 @@ docker run -d --name WeatherStation --network=host amrmomtaz/weather-stations-mo
 # Run the BaseCentralStation
 docker run -d --name BaseCentralStation --network=host amrmomtaz/weather-stations-monitoring:base-central-station
 ```
-Please note the following points in the previous scripts:
+Please note the following points in the previous script:
 * The commands' order must be maintained.
-* The _host_ network is used which can be changed (for security reasons) with a different one. The following command is used to create a network ```docker network create <my-bridge-network>```.
+* The _host_ network can be changed (for security reasons). To create a seperate network use this command ```docker network create {my-bridge-network}```.
 * More weather stations can by running the forth command changing the container's name.
 
+Finally, a _docker-compose.yml_ file is available in the root directory which can be used directly to build and run everything.<br>
+Go to the repo root directory and run the following command where you can specify the desired number of weather stations:
+```bash
+docker-compose up -d --scale weather_station={Number of Weather Stations}
+```
+The following screenshot shows the running containers in docker-desktop:
+
 ![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/f76763b5-eb40-43e5-9ad2-95f9b8eb9e22)
-
-
 
 ### Kuberneets
