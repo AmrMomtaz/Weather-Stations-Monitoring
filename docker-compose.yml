@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  kafka:
+    image: johnnypark/kafka-zookeeper:2.6.0
+    container_name: Kafka
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    environment:
+      ADVERTISED_HOST: localhost
+      NUM_PARTITIONS: 1
+
+  elasticsearch_kibana:
+    image: nshou/elasticsearch-kibana:latest
+    container_name: Elasticsearch_Kibana
+    ports:
+      - "9200:9200"
+      - "5601:5601"
+    environment:
+      SSL_MODE: "false"
+      discovery.type: "single-node"
+
+  weather_data_service:
+    image: amrmomtaz/weather-stations-monitoring:weather-data-service
+    container_name: WeatherDataService
+    network_mode: "host"
+    depends_on:
+      - kafka
+      - elasticsearch_kibana
+
+  weather_station:
+    image: amrmomtaz/weather-stations-monitoring:weather-station
+    container_name: WeatherStation
+    network_mode: "host"
+    depends_on:
+      - weather_data_service
+
+  base_central_station:
+    image: amrmomtaz/weather-stations-monitoring:base-central-station
+    container_name: BaseCentralStation
+    network_mode: "host"
+    depends_on:
+      - weather_station
+
