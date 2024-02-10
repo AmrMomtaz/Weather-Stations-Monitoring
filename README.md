@@ -165,7 +165,7 @@ And finally, The following table shows my development enviroment versions used:
 | **Java**          | 17.0.2          |
 | **Maven**         | 3.9.0           |
 | **Docker**        | 25.0.3          |
-| **Docker Compose**| 2.24.5          |
+| **Docker-Compose**| 2.24.5          |
 | **Kuberneets**    |                 |
 
 ### Docker
