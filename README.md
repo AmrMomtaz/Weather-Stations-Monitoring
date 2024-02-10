@@ -169,7 +169,7 @@ The following [image](https://hub.docker.com/r/johnnypark/kafka-zookeeper/) is u
 The following commands are used to run the containers:
 ```bash
 # Run Kafka
-docker run -d --name Kafka -p 2181:2181 -p 9092:9092 -e ADVERTISED_HOST=localhost -e NUM_PARTITIONS=1 johnnypark/kafka-zookeeper
+docker run -d --name Kafka -p 2181:2181 -p 9092:9092 -e ADVERTISED_HOST=localhost -e NUM_PARTITIONS=1 johnnypark/kafka-zookeeper:2.6.0
 
 # Run Kibana and Elasticsearch
 docker run -d --name Elasticsearch_Kibana -p 9200:9200 -p 5601:5601 -e SSL_MODE=false -e discovery.type=single-node nshou/elasticsearch-kibana
