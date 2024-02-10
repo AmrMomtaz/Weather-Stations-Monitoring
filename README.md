@@ -148,7 +148,7 @@ The **BaseCentralStation** connects to Kafka using the group ID "base_central_st
 
 **Elasticsearch & Kibana** runs with SSL/TLS mode **disabled** and elasticsearch forms a single node cluster.
 
-The port/version of each service are the following (all the ports are exposed with the same number):
+The port and version of each service are described as following (all the ports are exposed with the same number):
 
 | **Service**       | **Port Number** | **Version** |
 |:------------------|:---------------:|:-----------:|
