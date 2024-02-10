@@ -1,10 +1,11 @@
 # Weather-Stations-Monitoring
 
 This project servers as the course project for **CSE-4E3: Designing Data Intensive Applications** which aims at:
-1) Implementing different integration patterns discuessed in [**Enterprise Integration Patterns**](https://www.enterpriseintegrationpatterns.com/).
-2) Connecting microservices using Kafka and gRPC.
-3) Deploying using Kuberneets and Docker.
-4) Implementing [**Bitcask**](https://riak.com/assets/bitcask-intro.pdf) (A Log-Structured Hash Table).
+1) Applying the microservices architecture.
+2) Implementing different integration patterns discuessed in [**Enterprise Integration Patterns**](https://www.enterpriseintegrationpatterns.com/).
+3) Connecting microservices using Kafka and gRPC.
+4) Deploying using Kuberneets and Docker.
+5) Implementing [**Bitcask**](https://riak.com/assets/bitcask-intro.pdf) (A Log-Structured Hash Table).
 
 ## Overview
 
