@@ -21,7 +21,7 @@ microservices.
 ## System Architecture
 
 The system is composed of three stages:
-* **Data Acquisition:** multiple weather stations fetch data from the weather data service using _gRPC_ calls and feed a queueing service (Kafka) with their readings.
+* **Data Acquisition:** multiple weather stations fetch data from the weather data service using _gRPC_ calls and feed a queueing service (_Kafka_) with their readings.
 * **Data Processing & Archiving:** The base central station is consuming the streamed
 data and archiving all data in the form of Parquet files.
 * **Indexing:** two variants of index are maintained:
@@ -43,7 +43,7 @@ Provides the current weather data to the weather stations performing the followi
 Important notes:
 * The gRPC server runs on its default port 6565 (Can be changed in the source code).
 * Both the "weather data service" and the "weather station" use the same exact protobuf schema (located in the project's resources).
-* This service only fetches the response and sends it back to the station after parsing it to match the protobuf schema. It doesn't modify any data from the received API response.
+* This service only fetches the response and sends it back to the station after parsing it to match the protobuf schema. It doesn't modify the received API response.
 
 To build the jar, go to the project's directory and run ```mvn clean package``` and it will be build in the target dicrectory with name _WeatherDataService-1.0-SNAPSHOT-jar-with-dependencies.jar_.
 
@@ -78,7 +78,7 @@ The weather station performs the following:
 4) Stores invalid messages in a seperate channel [**"Invalid Message Channel"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/InvalidMessageChannel.html).
 5) Feeds the message to Kafka service (drops **10%** of them).
 
-The API response, filtered message and enriched message's are located in the project's resources.<br>
+The API response, filtered message and enriched message are located in the project's resources.<br>
 To build the jar, go to the project's directory and run ```mvn clean package``` and it will be build in the target's dicrectory with name _WeatherStation-1.0-SNAPSHOT-shaded.jar_.
 
 ## Base Central Station
@@ -158,6 +158,15 @@ The port/version of each service are the following (all the ports are exposed wi
 | **Elasticsearch** | 9200            | 8.10.4      |
 | **Kibana**        | 5601            | 8.10.4      |
 
+And finally, The following table shows my development enviroment versions used:
+
+|                   | **Version**     |
+|:------------------|:---------------:|
+| **Java**          | 17.0.2          |
+| **Maven**         | 3.9.0           |
+| **Docker**        | 25.0.3          |
+| **Docker Compose**| 2.24.5          |
+| **Kuberneets**    |                 |
 
 ### Docker
 
