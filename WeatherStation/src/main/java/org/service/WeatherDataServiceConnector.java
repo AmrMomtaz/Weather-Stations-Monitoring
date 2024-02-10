@@ -6,15 +6,41 @@ package org.service;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 /**
  * Connects to the weather data service, fetches WeatherData object, parses it and returns it in JSONObject.
+ * It waits for the GRPC server to start gracefully using the defined number of tries and cooldown duration defined below.
  */
 public final class WeatherDataServiceConnector {
 
-    public static JSONObject getWeatherData() {
-        WeatherDataOuterClass.WeatherData weatherData = getWeatherDataObject();
+    private static final int TRIALS = 5;
+    private static final int COOLDOWN = 10; // cooldown in seconds
+    private static final Logger logger = LogManager.getLogger(WeatherDataServiceConnector.class);
+
+    public static JSONObject getWeatherData() throws InterruptedException {
+        WeatherDataOuterClass.WeatherData weatherData = null;
+        for (int t = 0 ; t <= TRIALS ; t++) {
+            try {
+                weatherData = getWeatherDataObject();
+            }
+            catch (StatusRuntimeException exception) {
+                if (t == TRIALS) {
+                    String errMsg = "GRPC server couldn't start";
+                    logger.error(errMsg);
+                    throw new RuntimeException(errMsg, exception);
+                }
+                else {
+                    logger.info("Weather station will sleep for (" + COOLDOWN + ") seconds waiting " +
+                                "for the GRPC to start. [TRAIL=" + (t+1) + "]");
+                    Thread.sleep(COOLDOWN * 1000);
+                }
+            }
+        }
+        assert weatherData != null;
         return parseWeatherData(weatherData);
     }
 
