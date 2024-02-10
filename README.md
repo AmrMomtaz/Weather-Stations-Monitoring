@@ -193,7 +193,7 @@ Go to the repo root directory and run the following command where you can specif
 ```bash
 docker-compose up -d --scale weather_station={Number of Weather Stations}
 ```
-The following screenshot shows the running containers in docker-desktop:
+The following screenshot shows the running containers on docker-desktop:
 
 ![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/f76763b5-eb40-43e5-9ad2-95f9b8eb9e22)
 
