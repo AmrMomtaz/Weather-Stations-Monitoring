@@ -202,8 +202,17 @@ Go to the repo root directory and run the following command where you can specif
 ```bash
 docker-compose up -d --scale weather_station={Number of Weather Stations}
 ```
-The following screenshot shows the running containers on docker-desktop:
+The following screenshot shows the running containers on _docker-desktop_:
 
 ![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/f76763b5-eb40-43e5-9ad2-95f9b8eb9e22)
 
 ### Kuberneets
+
+The system was deployed locally on one node **k8s** cluster using [**minikube**](https://minikube.sigs.k8s.io/docs/start/) and [**kubectl**](https://kubernetes.io/docs/tasks/tools/) was used to control this cluster.<br>
+After having installed _minikube_ and _kubectl_, follow these commands to deploy the services:
+```bash
+# Start minikube cluster
+minikube start --driver docker
+
+
+```
