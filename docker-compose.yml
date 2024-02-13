@@ -31,7 +31,6 @@ services:
 
   weather_station:
     image: amrmomtaz/weather-stations-monitoring:weather-station
-    container_name: WeatherStation
     network_mode: "host"
     depends_on:
       - weather_data_service

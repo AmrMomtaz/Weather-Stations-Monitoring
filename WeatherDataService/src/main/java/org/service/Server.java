@@ -22,6 +22,8 @@ public final class Server extends org.service.WeatherDataServiceGrpc.WeatherData
     private static final String API_URL = "https://api.open-meteo.com/v1/forecast?latitude=31.2018&longitude=29.9158" +
             "&hourly=relativehumidity_2m&current_weather=true&timezone=Africa%2FCairo&forecast_days=1&timeformat=unixtime&temperature_unit=fahrenheit";
     private static final Integer TRIALS = 5;
+    private static final Integer COOLDOWN = 5;  // cooldown for re-submitting the request in seconds;
+
     @Override
     public void getWeatherData(org.service.WeatherDataOuterClass.WeatherDataRequest request,
                                io.grpc.stub.StreamObserver<org.service.WeatherDataOuterClass.WeatherData> responseObserver) {
@@ -29,7 +31,7 @@ public final class Server extends org.service.WeatherDataServiceGrpc.WeatherData
         logger.info("Received weather data request from client {" + request.getClientId() + "}");
         JSONObject jsonResponse = fetchData();
 
-        if (jsonResponse == null) logger.error("Internet connection failure. " +
+        if (jsonResponse == null) logger.error(
                 "Couldn't fetch data for the request sent by client {" + request.getClientId() + "}.");
         else {
             WeatherDataOuterClass.WeatherData weatherData = parseJsonData(jsonResponse);
@@ -55,7 +57,15 @@ public final class Server extends org.service.WeatherDataServiceGrpc.WeatherData
                 connection.disconnect();
                 return jsonResponse;
             }
-            catch (IOException ignored) {}
+            catch (IOException e) {
+                logger.error(e.getMessage());
+                try {
+                    Thread.sleep(COOLDOWN * 1000);
+                }
+                catch (InterruptedException exception) {
+                    throw new RuntimeException(exception);
+                }
+            }
         }
         return null;
     }
