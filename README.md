@@ -166,7 +166,7 @@ And finally, The following table shows my development enviroment versions used:
 | **Maven**         | 3.9.0           |
 | **Docker**        | 25.0.3          |
 | **Docker-Compose**| 2.24.5          |
-| **Kuberneets**    |                 |
+| **Kuberneets**    | 1.28.3          |
 
 ### Docker
 
@@ -195,7 +195,7 @@ docker run -d --name BaseCentralStation --network=host amrmomtaz/weather-station
 Please note the following points in the previous script:
 * The commands' order must be maintained.
 * The _host_ network can be changed (for security reasons). To create a seperate network use this command ```docker network create {my-bridge-network}```.
-* More weather stations can by running the forth command changing the container's name.
+* More weather stations can be deployed by running the forth command changing the container's name.
 
 Finally, a _docker-compose.yml_ file is available in the root directory which can be used directly to build and run everything.<br>
 Go to the repo root directory and run the following command where you can specify the desired number of weather stations:
