@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-station-deployment
+  labels:
+    app: weather-station
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-station
+  template:
+    metadata:
+      labels:
+        app: weather-station
+    spec:
+      containers:
+      - name: elasticsearch-kibana
+        image: nshou/elasticsearch-kibana:latest
+        ports:
+        - containerPort: 5601
+        - containerPort: 9200
+        env:
+        - name: SSL_MODE
+          value: "false"
+        - name: discovery.type
+          value: "single-node"
+      - name: kafka-zookeeper
+        image: johnnypark/kafka-zookeeper:2.6.0
+        ports:
+        - containerPort: 2181
+        - containerPort: 9092
+        env:
+        - name: ADVERTISED_HOST
+          value: "localhost"
+        - name: NUM_PARTITIONS
+          value: "1"
+      - name: ws-weather-data-service
+        image: amrmomtaz/weather-stations-monitoring:weather-data-service
+        ports:
+        - containerPort: 6565
+      - name: ws-weather-station
+        image: amrmomtaz/weather-stations-monitoring:weather-station
+      - name: ws-base-central-station
+        image: amrmomtaz/weather-stations-monitoring:base-central-station
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-station-service
+spec:
+  type: NodePort
+  selector:
+    app: weather-station
+  ports:
+    - name: kibana-port
+      protocol: TCP
+      port: 5601
+      targetPort: 5601
+      nodePort: 30017
