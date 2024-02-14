@@ -197,7 +197,7 @@ docker run -d --name BaseCentralStation --network=host amrmomtaz/weather-station
 ```
 Please note the following points in the previous script:
    * The commands' order must be maintained.
-   * The _host_ network can be changed (for security reasons). To create a seperate network use this command ```docker network create {my-bridge-network}```.
+   * The _host_ network can be changed (for security reasons). To create a seperate network use this command <br>```docker network create {my-bridge-network}```.
    * More weather stations can be deployed by running the forth command changing the container's name.
 
 Finally, _**docker-compose.yaml**_ is available in the root directory which can be used directly to build and run everything.<br>
