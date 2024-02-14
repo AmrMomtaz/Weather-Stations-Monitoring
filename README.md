@@ -148,7 +148,7 @@ The **BaseCentralStation** connects to Kafka using the group ID "base_central_st
 
 **Elasticsearch & Kibana** runs with SSL/TLS mode **disabled** and elasticsearch forms a single node cluster.
 
-The port and version of each service are described as following (all the ports are exposed with the same number):
+The port and version of each service are described as following:
 
 | **Service**       | **Port Number** | **Version** |
 |:------------------|:---------------:|:-----------:|
@@ -157,6 +157,10 @@ The port and version of each service are described as following (all the ports a
 | **Kafka**         | 9092            | 2.6.0       |
 | **Elasticsearch** | 9200            | 8.10.4      |
 | **Kibana**        | 5601            | 8.10.4      |
+
+Two points to mention:
+   1) All ports are exposed having the same value in docker deploymenet.
+   2) In kuberneets deployment, Kibana's port is exposed to **30017**. 
 
 And finally, The following table shows my development enviroment versions used:
 
@@ -197,7 +201,7 @@ Please note the following points in the previous script:
 * The _host_ network can be changed (for security reasons). To create a seperate network use this command ```docker network create {my-bridge-network}```.
 * More weather stations can be deployed by running the forth command changing the container's name.
 
-Finally, a _docker-compose.yml_ file is available in the root directory which can be used directly to build and run everything.<br>
+Finally, _**docker-compose.yaml**_ is available in the root directory which can be used directly to build and run everything.<br>
 Go to the repo root directory and run the following command where you can specify the desired number of weather stations:
 ```bash
 docker-compose up -d --scale weather_station={Number of Weather Stations}
@@ -208,13 +212,25 @@ The following screenshot shows the running containers on _docker-desktop_:
 
 ### Kuberneets
 
-The system was deployed locally on one node cluster using [**minikube**](https://minikube.sigs.k8s.io/docs/start/) and [**kubectl**](https://kubernetes.io/docs/tasks/tools/) is used to control it.<br>
-All kuberneets deployments and services yml files are located in **K8s** directory where each yml file contains the deploymenet its service (if any) of each of the system's component.<br>
-All the deplyements have services to allow
-After having installed _minikube_ and _kubectl_, follow these commands to deploy the services:
+The system is deployed locally on one node cluster using [**minikube**](https://minikube.sigs.k8s.io/docs/start/) where [**kubectl**](https://kubernetes.io/docs/tasks/tools/) is used to control it.
+
+To allow the communication of containers using localhost, all the containers are placed in the same pod. Such that a single deployment is created containing all the containers and an external service is 
+defined exposing _Kibana_ port to be accessible to the hosting machine where the exposed port is **30017**.
+
+However, if a pod is to be created for each container. Internal services would be used to connect these pods and the code would rely on enviroment variables resloving the hosts instead of using localhost.
+
+The deployement and the external service are defined in _**k8s.yaml**_. Follow these steps to deploy the system:
 ```bash
+# Install minikube and kubectl
+
 # Start minikube cluster
 minikube start --driver docker
 
-
+# Apply the yaml file
+kubectl apply -f k8s.yaml
 ```
+The following screenshot shows minikube's status:
+
+![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/d4195c5f-5a35-4b8a-a143-5dc90db9c7ad)
+
+Finally, to access kibana, get minikube's ip address using ```minikube ip``` and navigate to it along side kibana's (30017).
