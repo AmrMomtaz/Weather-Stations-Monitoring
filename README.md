@@ -208,7 +208,9 @@ The following screenshot shows the running containers on _docker-desktop_:
 
 ### Kuberneets
 
-The system was deployed locally on one node **k8s** cluster using [**minikube**](https://minikube.sigs.k8s.io/docs/start/) and [**kubectl**](https://kubernetes.io/docs/tasks/tools/) was used to control this cluster.<br>
+The system was deployed locally on one node cluster using [**minikube**](https://minikube.sigs.k8s.io/docs/start/) and [**kubectl**](https://kubernetes.io/docs/tasks/tools/) is used to control it.<br>
+All kuberneets deployments and services yml files are located in **K8s** directory where each yml file contains the deploymenet its service (if any) of each of the system's component.<br>
+All the deplyements have services to allow
 After having installed _minikube_ and _kubectl_, follow these commands to deploy the services:
 ```bash
 # Start minikube cluster
