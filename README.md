@@ -4,7 +4,7 @@ This project servers as the course project for **CSE-4E3: Designing Data Intensi
    1) Applying the microservices architecture.
    2) Implementing different integration patterns discussed in [**Enterprise Integration Patterns**](https://www.enterpriseintegrationpatterns.com/).
    3) Connecting microservices using Kafka and gRPC.
-   4) Deploying using Kuberneets and Docker.
+   4) Deploying using Kubernetes and Docker.
    5) Implementing [**Bitcask**](https://riak.com/assets/bitcask-intro.pdf) (A Log-Structured Hash Table).
 
 ## Overview
@@ -120,7 +120,7 @@ The Bitcask store is imported as a dependency in the _base central station_ (you
 ## Elasticsearch & Kibana
 
 [**Elasticsearch**](https://www.elastic.co/) is a search engine which provides a distributed, multitenant-capable full-text search engine with an HTTP web interface 
-and schema-free JSON documents. [**Kibana**](https://www.elastic.co/kibana) is a source-available data visualization dashboard software for Elasticsearch.<br>
+and schema-free JSON documents. [**Kibana**](https://www.elastic.co/Kibana) is a source-available data visualization dashboard software for Elasticsearch.<br>
 
 I've created a data view for the _weather_data_ index and deployed three weather stations and waited for three parquet files (located in the BaseCentralStation's resources) to be imported to _elasticsearch_ and got the following results:
 
@@ -135,9 +135,9 @@ After selecting a single weather station and inspecting the sequence number we g
 The record's count is 991 where the maximum sequence number is 1,109 which means that **89.3%** of records are delivered and **10.7%** are dropped.
 
 
-## Configurations & Deployment (Docker & Kuberneets)
+## Configurations & Deployment (Docker & Kubernetes)
 
-This section describes the system configurations and the subsequent subsections describes the system's deployment on docker and kuberneets.
+This section describes the system configurations and the subsequent subsections describes the system's deployment on docker and Kubernetes.
 
 The **WeatherDataService** runs **SpringBootApplication** and the **gRPC** server. It fetches the data from open-meteo by sending a **GET** request and it makes five trials, waiting five seconds in each trial, trying to fetch the data and in case of internet failure the service hangs.
 
@@ -159,7 +159,7 @@ The port and version of each service are described as following:
 
 Two points to mention:
    1) All ports are exposed having the same number when deploying in docker.
-   2) In Kuberneets, only Kibana's port is exposed to **30017**. 
+   2) In Kubernetes, only Kibana's port is exposed to **30017**. 
 
 Finally, the following table shows my development environment versions' used:
 
@@ -169,14 +169,14 @@ Finally, the following table shows my development environment versions' used:
 | **Maven**         | 3.9.0           |
 | **Docker**        | 25.0.3          |
 | **Docker-Compose**| 2.24.5          |
-| **Kuberneets**    | 1.28.3          |
+| **Kubernetes**    | 1.28.3          |
 
 ### Docker
 
 To build the images, go to the **_deployment_** directory in _WeatherDataService_, _WeatherStation_ & _BaseCentralStation_ and run the following command ```docker build -t <image-name> .``` replacing the \<image-name\> accordingly.
 
 These images are hosted on [DockerHub](https://hub.docker.com/r/amrmomtaz/weather-stations-monitoring/tags) and they can be pulled directly.<br>
-The following [image](https://hub.docker.com/r/johnnypark/kafka-zookeeper/) is used for _Kafka_ including _Zookeeper_, and this [one](https://hub.docker.com/r/nshou/elasticsearch-kibana) is for _Elasticsearch_ and _Kibana_.
+The following [image](https://hub.docker.com/r/johnnypark/kafka-zookeeper/) is used for _Kafka_ including _Zookeeper_, and this [one](https://hub.docker.com/r/nshou/elasticsearch-Kibana) is for _Elasticsearch_ and _Kibana_.
 
 The following commands are used to run the containers:
 ```bash
@@ -184,7 +184,7 @@ The following commands are used to run the containers:
 docker run -d --name Kafka -p 2181:2181 -p 9092:9092 -e ADVERTISED_HOST=localhost -e NUM_PARTITIONS=1 johnnypark/kafka-zookeeper:2.6.0
 
 # Run Kibana and Elasticsearch
-docker run -d --name Elasticsearch_Kibana -p 9200:9200 -p 5601:5601 -e SSL_MODE=false -e discovery.type=single-node nshou/elasticsearch-kibana
+docker run -d --name Elasticsearch_Kibana -p 9200:9200 -p 5601:5601 -e SSL_MODE=false -e discovery.type=single-node nshou/elasticsearch-Kibana
 
 # Run the WeatherDataService
 docker run -d --name WeatherDataService --network=host amrmomtaz/weather-stations-monitoring:weather-data-service
@@ -209,7 +209,7 @@ The following screenshot shows the running containers on _docker-desktop_:
 
 ![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/f76763b5-eb40-43e5-9ad2-95f9b8eb9e22)
 
-### Kuberneets
+### Kubernetes
 
 The system is deployed locally on one node cluster using [**minikube**](https://minikube.sigs.k8s.io/docs/start/) where [**kubectl**](https://kubernetes.io/docs/tasks/tools/) is used to control it.
 
@@ -232,4 +232,4 @@ The following screenshot shows minikube's status:
 
 ![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/d4195c5f-5a35-4b8a-a143-5dc90db9c7ad)
 
-Finally, to access kibana, get minikube's ip address using ```minikube ip``` and navigate to it alongside kibana's port number (30017).
+Finally, to access Kibana, get minikube's ip address using ```minikube ip``` and navigate to it alongside Kibana's port number (30017).
