@@ -15,7 +15,7 @@ global internet. Hence, efficient stream processing is inevitable.
 
 One use case is the distributed weather stations. Each "**weather station**" emits
 readings for the current weather status to the "**base central station**" for persistence and
-analysis. In this project, the architecture of a weather monitoring system is implemented using microservices.
+analysis. In this project, the architecture of the weather stations monitoring system is implemented using microservices.
 
 ## System Architecture
 
@@ -70,7 +70,7 @@ The weather station randomly drops messages on a **10%** rate and randomly chang
    * High = **30%** of messages.
 
 The weather station performs the following:
-   1) Sends gRPC request to weather data service and receives weather data response.
+   1) Sends gRPC request to the _weather data service_ and receives weather data response.
    2) Drops unused fields and filters the message [**"Contents Filter Pattern"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/ContentFilter.html).
    3) Enriches the message with the missing weather station state fields [**"Contents Enricher Pattern"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/DataEnricher.html).
    4) Stores invalid messages in a separate channel [**"Invalid Message Channel"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/InvalidMessageChannel.html).
@@ -82,15 +82,18 @@ To build the jar, go to the project's directory and run ```mvn clean package``` 
 
 ## Base Central Station
 
-The base central station consumes the streamed data from Kafka (polls the data every 100ms) and persists the data in **Bitcask Store** where it keeps the latest reading of each weather station (as described in the next section).<br>
+The base central station is the core of the system which performs the following:
+   * Consumes the streamed data from Kafka (polls the data every 100ms).
+   * Flattens the incoming json objects and renames its fields (for better readability).
+   * Persists the data in **Bitcask Store** where it keeps the latest reading of each weather station (more details in the next section).
+   * Initializes the **_weather_data_** index in elasticsearch and configures its options and mappings using _**IndexConfigs.json**_.
+   * Writes parquet records and persists the data in elasticsearch as described below.
 
-The central station flattens the incoming json objects and renames its fields (for better readability). It initializes the **_weather_data_** index in elasticsearch and configures its options and
-mappings using _**IndexConfigs.json**_ (located in the project's resources).<br>
 To write parquet records, the json objects are converted to **Avro** (using the avro schema defined in _**AvroSchema.avsc**_) 
 which are then written as Parquet records. Due to the fact that Parquet doesn't have its own set of Java objects. Instead, it reuses the objects from other formats like Avro [(link)](https://stackoverflow.com/questions/39858856/json-object-to-parquet-format-using-java-without-converting-to-avrowithout-usin). Note that you must have **HADOOP_HOME** and **hadoop.home.dir** set in your enviroment variables.
 
-It also persists the data in **Elasticsearch** archiving all the weather data history of all stations in parquet files partitioned by time.
-Each parquet file contains **1,000** weather messages and it is stored in the _parquet_data_ directory and they are given the name of the first received weather message's timestamp written in this file.
+Persisting the data in **Elasticsearch** envolve archiving all the weather data history of all stations in parquet files partitioned by time.
+Each parquet file contains **1,000** weather messages and it is stored in the _parquet_data_ directory and it is given the name of the first received weather message's timestamp written in this file.
 After receiving 1,000 weather messages, the parquet file is flushed and all its data is bulk imported into elasticsearch in the _"weather_data"_ index.
 
 To build the jar, go to the project's directory and run ```mvn clean package``` and the jar will be created in the target's directory named _BaseCentralStation-1.0-SNAPSHOT-shaded.jar_.
@@ -135,9 +138,9 @@ After selecting a single weather station and inspecting the sequence number we g
 The record's count is 991 where the maximum sequence number is 1,109 which means that **89.3%** of records are delivered and **10.7%** are dropped.
 
 
-## Configurations & Deployment (Docker & Kubernetes)
+## Configurations
 
-This section describes the system configurations and the subsequent subsections describes the system's deployment on docker and Kubernetes.
+This section describes the system configurations and the subsequent sections describes the system's deployment on docker and Kubernetes.
 
 The **WeatherDataService** runs **SpringBootApplication** and the **gRPC** server. It fetches the data from open-meteo by sending a **GET** request and it makes five trials, waiting five seconds in each trial, trying to fetch the data and in case of internet failure the service hangs.
 
@@ -171,9 +174,9 @@ Finally, the following table shows my development environment versions' used:
 | **Docker-Compose**| 2.24.5          |
 | **Kubernetes**    | 1.28.3          |
 
-### Docker
+## Docker
 
-To build the images, go to the **_deployment_** directory in _WeatherDataService_, _WeatherStation_ & _BaseCentralStation_ and run the following command ```docker build -t <image-name> .``` replacing the \<image-name\> accordingly.
+To build the images, go to **docker** directory in _WeatherDataService_, _WeatherStation_ & _BaseCentralStation_ and run the following command ```docker build -t <image-name> .``` replacing the \<image-name\> accordingly.
 
 These images are hosted on [DockerHub](https://hub.docker.com/r/amrmomtaz/weather-stations-monitoring/tags) and they can be pulled directly.<br>
 The following [image](https://hub.docker.com/r/johnnypark/kafka-zookeeper/) is used for _Kafka_ including _Zookeeper_, and this [one](https://hub.docker.com/r/nshou/elasticsearch-Kibana) is for _Elasticsearch_ and _Kibana_.
@@ -209,7 +212,7 @@ The following screenshot shows the running containers on _docker-desktop_:
 
 ![image](https://github.com/AmrMomtaz/Weather-Stations-Monitoring/assets/61145262/f76763b5-eb40-43e5-9ad2-95f9b8eb9e22)
 
-### Kubernetes
+## Kubernetes
 
 The system is deployed locally on one node cluster using [**minikube**](https://minikube.sigs.k8s.io/docs/start/) where [**kubectl**](https://kubernetes.io/docs/tasks/tools/) is used to control it.
 
