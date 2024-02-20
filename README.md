@@ -53,7 +53,7 @@ weather status. The weather message has the following schema:
 ```yaml
 {
    "station_id": 1, # Long (randomly generated)
-   "s_no": 1, # Long (auto-incremental with each message per service)
+   "s_no": 1, # Long (auto-incremented with each message per service)
    "battery_status": "low", # String of (low, medium, high)
    "status_timestamp": 1681521224, # Long Unix timestamp
    "weather": {
@@ -76,7 +76,7 @@ The weather station performs the following:
    4) Stores invalid messages in a separate channel [**"Invalid Message Channel"**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/InvalidMessageChannel.html).
    5) Feeds the message to Kafka service (dropping **10%** of them).
 
-The API response, filtered message and enriched message are located in the project's resources.
+The API response and filtered message and enriched message are located in the project's resources.
 
 To build the jar, go to the project's directory and run ```mvn clean package``` and it will be built in the _target_ directory with name _WeatherStation-1.0-SNAPSHOT-shaded.jar_.
 
@@ -92,9 +92,9 @@ The base central station is the core of the system which performs the following:
 To write parquet records, the json objects are converted to **Avro** (using the avro schema defined in _**AvroSchema.avsc**_) 
 which are then written as Parquet records. Due to the fact that Parquet doesn't have its own set of Java objects. Instead, it reuses the objects from other formats like Avro [(link)](https://stackoverflow.com/questions/39858856/json-object-to-parquet-format-using-java-without-converting-to-avrowithout-usin). Note that you must have **HADOOP_HOME** and **hadoop.home.dir** set in your enviroment variables.
 
-Persisting the data in **Elasticsearch** envolve archiving all the weather data history of all stations in parquet files partitioned by time.
+Persisting the data in **Elasticsearch**, envolves archiving all the weather data history of all stations in parquet files partitioned by time.
 Each parquet file contains **1,000** weather messages and it is stored in the _parquet_data_ directory and it is given the name of the first received weather message's timestamp written in this file.
-After receiving 1,000 weather messages, the parquet file is flushed and all its data is bulk imported into elasticsearch in the _"weather_data"_ index.
+After receiving 1,000 weather messages, the parquet file is flushed, and all its data is bulk imported into elasticsearch in the _"weather_data"_ index.
 
 To build the jar, go to the project's directory and run ```mvn clean package``` and the jar will be created in the target's directory named _BaseCentralStation-1.0-SNAPSHOT-shaded.jar_.
 
@@ -146,7 +146,7 @@ The **WeatherDataService** runs **SpringBootApplication** and the **gRPC** serve
 
 **Kafka** starts using **ZooKeeper** where the Kafka Broker config advertised.listeners is set to PLAINTEXT:localhost and its number of partitions is set to one. Kafka topic's name, which connects the weather stations with the base central stations, is _"weather_data_topic"_ where the keys/values are serialized and deserialized using **StringSerializer**.
 
-The **BaseCentralStation** connects to Kafka using the group ID "base_central_station" and creates a new Bitcask handler with a root directory named _"bitcask_store"_. And it initializes the index name in elasticsearch to _"weather_data"_.
+The **BaseCentralStation** connects to Kafka using the group ID "base_central_station" and creates a new Bitcask handler with a root directory named _"bitcask_store"_. And it initializes the index in elasticsearch having the name _"weather_data"_.
 
 **Elasticsearch & Kibana** runs with SSL/TLS mode **disabled** and elasticsearch forms a single node cluster.
 
@@ -162,9 +162,9 @@ The port and version of each service are described as following:
 
 Two points to mention:
    1) All ports are exposed having the same number when deploying in docker.
-   2) In Kubernetes, only Kibana's port is exposed to **30017**. 
+   2) In Kubernetes, only Kibana's port is exposed to be **30017**. 
 
-Finally, the following table shows my development environment versions' used:
+Finally, the following table shows my development environment's versions used:
 
 |                   | **Version**     |
 |:------------------|:---------------:|
@@ -176,7 +176,7 @@ Finally, the following table shows my development environment versions' used:
 
 ## Docker
 
-To build the images, go to **docker** directory in _WeatherDataService_, _WeatherStation_ & _BaseCentralStation_ and run the following command ```docker build -t <image-name> .``` replacing the \<image-name\> accordingly.
+To build the images, go to **docker** directory in _WeatherDataService_, _WeatherStation_ & _BaseCentralStation_ and run <br> ```docker build -t <image-name> .``` replacing the \<image-name\> accordingly.
 
 These images are hosted on [DockerHub](https://hub.docker.com/r/amrmomtaz/weather-stations-monitoring/tags) and they can be pulled directly.<br>
 The following [image](https://hub.docker.com/r/johnnypark/kafka-zookeeper/) is used for _Kafka_ including _Zookeeper_, and this [one](https://hub.docker.com/r/nshou/elasticsearch-Kibana) is for _Elasticsearch_ and _Kibana_.
@@ -200,8 +200,8 @@ docker run -d --name BaseCentralStation --network=host amrmomtaz/weather-station
 ```
 Please note the following points in the previous script:
    * The commands' order must be maintained.
-   * The _host_ network can be changed (for security reasons). To create a seperate network use this command <br>```docker network create {my-bridge-network}```.
-   * More weather stations can be deployed by running the forth command changing the container's name.
+   * The _host_ network can be changed (for security reasons). To create a seperate network run <br> ```docker network create {my-bridge-network}``` and include it in the previous script.
+   * More weather stations can be deployed by running the fourth command changing the container's name.
 
 Finally, _**docker-compose.yaml**_ is available in the root directory which can be used directly to build and run everything.<br>
 Go to the repository's root directory and run the following command where you can specify the desired number of weather stations:
@@ -219,7 +219,7 @@ The system is deployed locally on one node cluster using [**minikube**](https://
 To allow the communication of containers using localhost, all the containers are placed in the same pod. Such that a single deployment is created containing all the containers and an external service is 
 defined exposing _Kibana's_ port to be accessible by the hosting machine where the exposed port is **30017**.
 
-However, if a pod is to be created for each container. Internal services would be created to connect these pods and the code would rely on environment variables resolving the hosts instead of using localhost.
+However, if a pod is to be created for each container. Internal services would be created to connect these pods and the code would rely on environment variables resolving the hosts' IP addresses instead of using localhost.
 
 The deployment and the external service are defined in _**k8s.yaml**_. Follow these steps to deploy the system:
 ```bash
